@@ -1,0 +1,1827 @@
+ReactJS:
+--------
+	- ReactJS is a JavaScript library that is responsible for the view portion of the front-end MVC
+	- ReactJS uses ES6 javascript as it's core langauge
+	- Babel used to transpile ES6 to ES5
+	- Babel also transpiles JSX to ES6
+	- ReactJs is s component based library
+
+Component Creation:
+-------------------
+	- Component's name should start with a capital letter.
+	- A component should exactly return one html element.
+	- A component can be functional or Class component.
+	- Class Component
+		- create must extend the React.Component
+		- minmum one Render method should be called inside the class component
+		- props is now converted into a member variable of the class component, called by this.props
+		- type of the properties prop-type can be used
+	
+===================================================================
+React Uses Components that you bring into existence with ReactDOM.render()
+React Component classes are created with a class(keyword) and its mandatory render() method
+React Component are reusable and take immmutable properties that are accessible via this.props.Name
+**To summarize the definition of React: React for the web consists of the React
+Core and ReactDOM libraries. React Core is a library geared toward building
+and sharing composable UI components using JavaScript and (optionally) JSX
+in an isomorphic/universal manner. On the other hand, to work with React in
+the browser, you can use the ReactDOM library, which has methods for DOM
+rendering as well as for server-side rendering.**
+====================================================================
+React App
+---------
+- src
+	- index.js - starting point
+		-> contains the following
+		- React-'react' and 'react-dom'
+		- index.css
+		- import App from ./App
+		- 
+	- App.js - functional component and the same is exported
+	
+How React knows it should start the page from index.js?
+
+The above is possible with the help of WebPack, which runs in the background.
+It is a bundling tool.
+https://webpackjs.org/
+
+
+1. Edureka Exercise for create-react-app
+====================
+Create a child component Welcome.
+Import the same in App component.
+
+
+
+--------------------------------------------------------------
+Three Different ways of using the if else statement
+--------------------------------------------------------------
+Approach1: Variable
+render(){
+	let link
+	if (this.user.session){
+		link = <a href = "/logout">Logout</a>
+	}else{
+		link = <a href = "/login">Login</a>
+	}
+	return <div>link</div>
+}
+
+
+Approach2: Expression
+render(){
+	let link = (seesionFlag) =>{
+		is(sessionFlag){
+			return <a href = "/logout">Logout</a>
+		}else{
+			return <a href = "/login">Login</a>
+		}
+	return <div>link{this.props.user.session}</div>
+	}
+}
+
+Approach3: Ternary Operator
+render(){
+	return <div>{(this.props.user.session) ? <a href = '/logout'>Logout</a>: <a href ="/login">Login</a>}</div>
+}
+
+Approach4: using IIFE Immediately Invoked Function Expression
+render(){
+	return <div>{
+		(sessionFlag) => {
+		if (sessionFlag)
+			return <a href='/logout'>Logout</a>
+		else
+			return <a href='/login'>Login</a>
+		}(this.props.user.session)
+		}</div>
+}
+
+
+Summary:
+1. JSX is just syntactic sugar for React methods like createElement.
+2. You should use className and htmlFor instead of the standard HTML class
+and for attributes.
+3. The style attribute takes a JavaScript object, not a string like normal HTML.
+4. Ternary operators and IIFE are the best ways to implement if/else statements.
+5. Outputting variables, comments, and HTML entities, and compiling JSX code
+into native JavaScript are easy.
+6. There are a few choices to turn JSX into regular JavaScript; compiling with the
+Babel CLI requires minimal setup compared to configuring build processing
+with a tool like Gulp or Webpack or writing Node/JavaScript scripts to use the
+Babel API.
+
+=================================================================================
+1. Properties are immutable in the current component, only it can be changed if you recreate the component by passing new values from the parent.
+Example:
+ComponentA (parent) =>(props)=> ComponentB => (this.props) => View.render()
+
+What are React Component States?
+1. A React state is a mutable data store of components.
+2. By using state in a View render() and changing the values of the later, we can affect the view's reperesentation.
+3. The states can be accessed by names, which is the attribute of the this.state object.
+4. State data is often used to display dynamic information in a view to augment the rendering of the view.
+5. React developers use states to generate new UI's as the Component variables viz. this.props, inutValues, classAtrributes(this.inputValues) don't do it.
+
+
+Note: Starting the http-server (http-server H:\ReactJsPractice\ch04)
+
+Working with States
+======================
+1. Accessing States:
+=> the state object is an attribute of the component and can be accessed with a 'this' reference. For instance: this.state.name
+=> We can render this.state in render() method as follows : this.state.inputFieldValues
+=> Unlike properties state are not set on a parent, we can'st state in render() method either becuase it will create a circular loop[setState -> render -> setState]
+
+2. Setting the initial state:
+=> The state will not work without initialization.
+=> To initialize the state use this.state in the constructor.(Note: remember to initialize the super(props) or the logic in the parrent won't work.
+=> The state is initialized as follows:
+class Clock extends React.Component{
+	constructor(props){
+		super(props);
+		this.state = {currentTime: (new Date()).toLocaleString()};
+	}
+}
+=> The state object can have nested nested object or arrays.
+For instance:
+class Content extends React.Component{
+	constructor(props){
+		super(props);
+		this.state = {
+			githubName: 'Prashu94',
+			books: {
+				'pro express.js',
+				'Angular.js in action',
+				'Learing Python'
+			}
+		}
+	}
+	render(){
+		return ......
+	}
+}
+=> The constructor() method is called just once when a REact element is created from this class. This way we can set state directly by using this.state just once, in the constructor method.
+
+3. Updating states:
+=> We can change states with this.setState(data, callback) class method.
+=> The above method first merges the data with current states and calls render(). After that react callls callback() method.
+=> Due the callbacke method the setState work asynchronously.
+=> To update the time we can use the setInterval() which is a browser time function which will update the state in milliseconds.
+For example:
+setInterval(()=>{
+	console.log("Updating Time...")
+	this.setState({
+		currentTime: (new Date()),toLocaleString()
+	})
+}, 1000)
+=> We will encompass the above setInterval function in launchClock becuse it needs to be updated when the page loads for the next time.
+=> this.setState is called from the vent handler or as the callback from incoming data or data updates.
+=> It is important to note that setState() updates only the states you pass to it or merged, but not completer replace.
+=> It does not replace the entire state object each time, So if you have three states and you change one then the other two state will remain the same.
+=> We should keep in mind that the setState trigger the render() method.
+
+Binding 'this' in JavaScript
+=============================
+=> In JS, 'this' keyword mutates the value depending on the place from which the function was called.
+=> To ensure this refers to your components class, we need to bind the function to the proper context(this value: component class).
+=> In ES6+ the fat arrow function syntax is use to create a function with auto-binding.
+For example:
+setInterval(()=>{
+	console.log("Updating Time...")
+	this.setState({
+		currentTime: (new Date()),toLocaleString()
+	})
+}, 1000)
+=> For binding manually we can do the below:
+setInterval(function(){
+	console.log("Updating Time...")
+	this.setState({
+		currentTime: (new Date()),toLocaleString()
+	})
+}.bind(this), 1000)
+=> The this keyword is function's closure, so we need to do some sort of binding.
+
+
+States and Properties
+========================
+1. States and Properties are both atributes of the class.(this.state and this.props)
+2. States are mutable and Properties are immutable.
+3. We pass properties from parnet components and states has to be defined in the component itself, not parent.
+4. Properties determine the view creation and then remains static, whereas the state is set and updated by the object.
+5. Not all components require to have states.
+6. Output of state and properties are views.
+
+Stateless Components
+=======================
+component A => (props) => component B=> (this.props)=>View
+					   component B.setState(data)=>[states are mutable, defined in each component]= > (this.state) => View
+
+Stateful and Stateless Components
+=====================================
+=> We created a clock which will display the Analog Clock and the digitial clock.
+=> There are three components: Clock, AnalogDisplay, DigitialDisplay which only ouput time.
+=> The code for Clock will contain 2 child components AnalogDisplay and DigitialDisplay.
+=> The AnalogDisplay and DigitialDisplay component passes the time property with the value of the currentTime state.
+Notes:
+1. In The above example we used the anonymous espressions stored as const variables.
+2. Another approach is use the syntax with IIFE:
+(function(props) {
+    return <div>{props.time}</div>
+})();//No fat-arrow syntax
+=> We see that the AnalogDisplay and DigitialDisplay components are completely stateless. All the logic and state are in the Clock.
+Note: React developers call the fat-arrow functions as the stateless components.
+
+BootStrap Structure
+-------------------------------------------------------------
+Container
+	-Row
+		-col
+		-col
+		-col
+	-Row
+		-col
+	-Row
+		-col
+		-col
+		-col
+		-col
+	-Row
+		-col
+The BootStrap can contain any number of rows col and container.
+Bootstrap (npm install bootstrap)
+ReactStrap (npm install reactstrap)
+import {Row,Col} from 'reactstrap'
+-----------------------------------------------------------------------------------------
+JSX urges programmers to go for className instead of class attribute in the html elements
+The above is changed due to the class keyword is already used by JSX to define class components, hence className.
+-----------------------------------------------------------------------------------------
+=========================================================================================
+React component lifecycle events
+=========================================================================================
+=> Lifecycle events help to mount events and inject necessary logic into components
+=> React provide a way to control and customize a components behaviour based on the lifecycle events.
+=> Following categories are present:
+1. Mounting Events:
+Happen when a React element(an instance of a component class) is attached to the DOM node
+2. Updating Events:
+Happen when a React element is updated as a result if new values of its properties or state.
+3. Unmounting events:
+Happen when a react element is detached from the DOM.
+
+=> Each and every REact component has lifecycle events that are triggered ate certain moments depending on what a component has done or will do.
+=> Lifecycle events allows to implement custom logic that will enhance what components can do.
+For instance:
+Fetch data from the backend or integrate 
+=> Categories of lifecycle events:
+1. Mounting-> React invokes events only once.
+2. Updating-> React can invoke events many times.
+3. Unmounting-> React invokes events only once.
+
+The order of execution of lifecycle events:
+1. constructor()- Happens when an element is created and lets you set properties and initial state.
+2. Mounting:
+	i) componentWillMount() - happens before mouting the DOM.
+	ii) componentDidMount() - happens after the mounting and rendering.
+3. Updating:
+	i) componentWillReceiveProps(nextProps) - happens when the component is about to receive props
+	ii) shouldComponentUpdate(nextProps, nextState)- Let's us optimize the component's rerendering by determining when to update and when not to update.
+	iii) componentWillUpdate(nextProps, nextState) - happens right before the component is updated.
+	iv) componentDidUpdate(prevProps, prevState) - Happens right after the component is updated.
+4. Unmounting:
+	i) componentWillUnmount() - Lets us unbind and detach any listeners or do the cleanup work before the component is unmounted.
+	
+Lifecycle:			
+=============================================================================================================================================
+Mounting					Updating Component Properties		Updating component states			Updating Using			Unmounting
+=============================================================================================================================================
+constructor()       
+componentWillMount()
+							componentWillReceiveProps()
+							shouldComponentUpdate()				shouldComponentUpdate()
+							componentWillUpdate()				componentWillUpdate()				componentWillUpdate()	
+render()					render()							render()							render()
+							componentDidUpdate()				componentDidUpdate()				componentDidUpdate()	
+componentDidMount()																											componentWillUnmount()
+===================================================================================================================================================
+Implementing an Event
+---------------------
+1. To, implement lifecycle events, we define them on a class as methods.
+2. React checks is there is a method with the above event names; if found it will call the method or continue with the normal flow.
+3. componentDidMount() method is called when the component is inserted into the DOM, this method is the recommended place to put the code to integrate	with other front end application and libraries as well as to send XHR requests to server.
+	becuase at this point in the lifecycle, we have access to all its elements including the children.
+Note: Isomorphic/Universal Code(components used on both server and browser)
+
+1. Application - simple did-mount tom understande teh usage of events.
+2. Application - logger application that will show the flow of Lifecycle Events.
+The logger Application works as follows:
+1. content.jsx contains the component Content to be rendered alongwith the child component taking the state of the time as input.
+2. logger.jsx is the child component of content.jsx which contains the lifecycle events
+i) First the constructor() is called.
+ii) The componentWillMount() method is called.
+iii) The render() method is called and prints the current state of the time variable in the front end
+iv) The componentDidMount() method is called which also prints the current element(DOM Node).
+v) The method componentWillReceiveProps() method is called, which accepts the current props.
+vi) shouldComponentUpdate() method is triggered with newProps : currentTime.
+vii) componentWillUpdate() method is tirggered new props and new statw which is null and the component render() method is triggered.
+viii) componentDidUpdate() method is triggered which contains the old PRops and Old state.
+1x) Repeat the steps from i) to viii) for 2 times more.
+
+Mounting Events
+------------------------------------
+1. The mounting category of events is all about a component being attached to the real DOM.
+2. Think of mounting as a way for a React element to see itself in the DOM.
+3. This typically happens when the ReactDOm.render() or the render() method is called.
+4. The mounting events are as follows:
+i) componentWillMount():- React knows that this element will be in the real world
+ii) componentDidMount():- React has inserted the React element into the real DOM; and the element is the DOM node.
+5. constructor() execution happens prior to componentWillMount(), also react first renders and then mounts the elements.
+
+=> componentWillMount()
+==========================
+1. Invoked only once in the component's lifecycle. The timing of the execution is just before the initial rendering.
+2. The lifecycle event componentWillMount() is executed when we render a REact element on the browser by calling ReactDOM.render().(Think of this as attaching a React element to the real DOM node.)
+3. If we are rendering the React component on  the server which bascially gets an HTML string, then even though there's no DOM on the server or mouting in that case too the event will be invoked.
+4. A state change typically rerenders the component, now if we update the setState in the componentWillMount() method or trigger updates as we diid in the Clock component then render() will get the updated state and no rerenders happen.
+
+=> componentDidMount()
+========================
+1. Invoked only once after intial rendering and is execcuted only once in the browser and not on the server, comes in handy when giving XHR requests.
+2.In this lifecycle event, you can access any references to children (for example, to
+	access the corresponding DOM representation). Note that the componentDidMount()
+	method of child components is invoked before that of parent components.
+3. It is the best place to integrate other Javascript libraries viz. we can fetch a JSON payload that has a list of users with their info. Then we can print the info using Twitter Bootstrap library.
+
+
+Updating Events
+--------------------------------------
+1. Mounting Events are often used to integrate React with outside world: other frameworks, libraries, other libraries.
+2. Updating Events are associated with updating components and the events are as follows:
+i) componentWillReceiveProps(newProps)
+ii) shouldComponentUpdate()
+iii) componentWillUpdate()
+iv) componentDidUpdate()
+
+Updating component properties
+===============================
+componentWillReceiveProps()
+shouldComponentUpdate()
+componentWillUpdate()
+render()
+componentDidUpdate()
+
+Updating component state
+===============================
+shouldComponentUpdate()
+componentWillUpdate()
+render()
+componentDidUpdate()
+
+Updating using forceUpdate()
+===============================
+componentWillUpdate()
+render()
+componentDidUpdate()
+
+----------------------------------------------------------
+componentWillReceiveProps(newProps)
+=====================================
+1. Triggered when a component receives new properties, hence called incoming property transition.
+2. This event allows us to intercept the component at the stage betweeen getting new propertiesand before render().
+3. It takes the newProps arguments and is not invoked on the initial render() of the component.
+4. The method event is useful if we want to capture new property and set the state accordingly before the rerender, and the old property value is in the this.props object.
+
+For instance:
+componentWillReceiveProps(newProps){
+	this.setState({
+		opacity: (newProps.isVisible) ?1:0
+	})
+}
+5. Inspite of receiving new properties, these properties may not necessarily have new values becuase React has now way to understand if the property value has changed.
+6. Therfore, componentWillReceiveProps is invoked each time there is a rerendering regardless of property value change. The decision to whether to update or ehat to update in the real DOM is up to the shouldComponentUpdate) method event.
+
+shouldComponentUpdate()
+===========================
+1. Invoked right before rendering, rendering is preceded by the receipt of new properties or state.
+2. We can implement the event wuth return false to prohibit the React from rerendering.
+3. For instance:
+shouldComponentUpdate(newProps, ){
+	return this,.state.opacity!== +newProps.isVisible
+}
+4.When isVisible is false and this.state.opacity is 0, the entire render() is
+skipped; also, componentWillUpdate() and componentDidUpdate() aren’t called. In
+essence, you can control whether a component is rerendered.
+
+componentWillUpdate()
+===========================
+1. Event is triggered just before rendering, preceded by the receipt of the new props or state.
+2. It can be use to do prepartaion before an update occurs and avoid using the this.setState()
+3. If the shouldComponentUpdate() event returns false the componentWillUpdate() is not called.
+
+
+componentDidUpdate()
+============================
+1. Triggered immediately after the component's updates are rendered in the DOM.
+
+
+Unmounitng Events
+==============================================================
+componentWillUnmount()
+---------------------------
+1. Triggered just before a component is unnmounted from the DOM.
+
+
+Example: Note Web App to save online text.
+
+================================================================================
+Handling Events in React
+================================================================================
+Working with DOM Events in React
+-------------------------------------
+1. We define the the event handler(function definition) as the value of an element attribute in JSX and as an element property in plain JavaScript(when createElement() is called directly without JSX).
+2. For Example:
+i) In React you can define an event listener that's triggered when a user clicks the button.
+ii) In the event listener you're logging the this context.
+iii) The event object is an enhanced version of a native DOM event object.
+
+DOM Events Supported
+----------------------
+Mouse Events 
+=============
+onClick, onContextMenu, onDoubleClick, onDrag, onDragEnd,
+onDragEnter, onDragExit, onDragLeave, onDragOver, onDragStart,
+onDrop, onMouseDown, onMouseEnter, onMouseLeave, onMouseMove,
+onMouseOut, onMouseOver, onMouseUp
+
+Keyboard Events
+===============
+onKeyDown, onKeyPress, onKeyUp
+
+Clipboard Events
+=================
+onCopy, onCut, onPaste
+
+Form events
+===========
+onChange, onInput, onSubmit
+
+Focus Events
+============
+onFocus, onBlur
+
+Touch Events
+============
+onTouchCancel, onTouchEnd, onTouchMove, onTouchStart
+
+UI Events
+=========
+onScroll
+
+Wheel Events
+============
+onWheel
+
+Selection Events
+=================
+onSelect
+
+Image Events
+=============
+onLoad, onError
+
+Animation Events
+=================
+onAnimationStart, onAnimationEnd, onAnimationiteration
+
+Transition Events
+=================
+onTransitionEnd
+
+
+Capture and Bubbling Phases
+----------------------------------
+1. As react is an imperative langauge hence we can decalre an event in the JSX as an attribute (for instance: onClick = {handleSave})
+2. The events such as onMouseOver() events are triggered by the event in the bubbling phase.
+3. The capture phase which precedes the bubbling and the target phrases.
+Window->Document-><html>-><body>-><table>-><tbody>-><tr>-><td>-A-><td>-B
+--------------------------->Capture Phase						Target Phase<---
+													Bubbling<----------
+4. Example Mouse:
+i) The onMouseOverCapture event is called first.
+ii) The onMouseOver event is then called.
+
+React Events under the hood
+--------------------------------
+1. When we put events directly on nodes there may be problem of removing and adding events during the UI lifecycle.
+2. Suppose we have a list of accounts and each can be removed or edited or new accounts can be added to the list. The following can be done:
+i) DOM event is added as <li> event.
+ii) The request bubbles up to the <ul> which is the Parent/
+iii) Event then bubbles up to the Parent Document(root) captured by the React event Listener.
+iv) Event handler then manages events.
+3. Following are some of the attributes and methods of React Synthetic Events:
+- currentTarget -> DOMEventTarget of the element that's capturing the event.
+- target -> DOMEventTarget, the element where the event was triggered
+- nativeEvent -> DOMEvent, the native browser event
+- preventDefault ->Prevents the default behaviour, such as linking the form button
+- isDefaultPreventes() -> returns a bollen value if the default is prevented or not.
+- stopPropagation()-> Stop propagation of the event
+- isPropagationStopped() -> boolean value
+- type- A string tag name
+- persist() - removs the synthetic event from the pool and allows to reference the event retained by the user code.
+
+Using Events and States
+--------------------------
+WE implemented a onclick event that uses the increment state counter example to cahnge the value of the button label on each clicks
+We used the following to implement the same:
+
+constructor()- initializes the counter to 0
+handleClick()- Event handler that increments the count on each click
+render() - renders the button element with the onClick event that calls the hnadleClcik to increment the count after each click and render the same in the button label.
+
+Passing event handlers as properties
+------------------------------------------
+Consider the scenario: we have a button that's a stateless component, how can we attach an event listener so this button can trigger some code.
+As properties are immutable and are passed from the parent components to their children, and as functions are first-class citizens in JavaScript, we can have a property 
+in the childe element that's a function and use it as a event handler.
+We implement in onclick-props example as follows
+1. We break down the above example into 2 code blocks :
+	i) ClickCounterButton- stateless component(child)
+	ii) Content - stateful component.(parent)
+2. The ClickCounterButton doesn't have its own onClick event but uses the one passed down by the parent content class in this.props.handler
+
+Exchanging data between components
+------------------------------------
+Now we will implement with three components:
+1. ClickCounterButton 
+2. Content
+3. Counter 
+
+In the above implementation the Counter and the ClickcounterButtom has to commmunicate with each other and they do it with the help of the Content component.
+
+Responding to DOM events not Supported by React
+=================================================
+Used to render events not supported by React for instance the resize events are not supported.
+For Example we will implement a radio button to check the resize event.
+To attach unsupported events like resize we can use the React Component Lifecycle
+The code in radio.jsx mounts the resize() function to the window using the componentDidMount event and then removes the same event 
+listeners in componentWillUnmount event to make sure notheing is left after this component is gone from the DOM.
+
+Integrating React with other libraries: jQuery UI events
+---------------------------------------------------------------
+Implement a Slider function using a custom event with the help of React Component Lifecycle
+======================================================================================================================================
+Working with forms in React
+======================================================================================================================================
+Best practice to implement form/input options in React
+1. Define the elements in render() using the values from the state.
+Note:- The state we are talking about is the below instance
+handleChange(event){
+	this.setState({title: event.target.value})
+}
+render(){
+	return <input type ="text" name = "title" value = {this.state.title}
+	onChange= {this.handleChange.bind(this}>
+}
+2. Capture changes to the form element as they happen using onChange
+3. Update the internal state in the event handler
+4. New vlues are saved in the state, and then the view is updated by a new render()
+
+One Way Binding:
+User -> 1. input to the view 
+-> View -> 2. Captured cahnges from the views(event.target.value)
+-> State -> 3. New values from state -> View
+
+Two Way Binding:
+Model-> View
+View -> Model
+
+<form> element can have events as follows:
+1. onChange - Fires when there is a change in any of the form's input elements
+2. onInput - Fires for each change in <textarea><input> element values.
+3. onSubmit - Fires when the form is submitted.
+
+List of interactive properties/fields you can read from the events like onChange attached to form elements:
+1. value - Applies to <input>. <textarea> and <select>
+2. checked - Applies to <input> with type= "checkbox" and type = "radio"
+3. selected - Applies to <option>(used with <select>)
+
+The type attribute of the <input> can have following:
+1. text - Plain text input fields
+2. password - Masked display of text
+3. radio - Radio Button
+4. checkbox - Check Box Element
+5. button - Button form element
+
+
+Best example to refer in thi chapter(elements, email)
+===============================================================================
+FullStack React Book
+===============================================================================
+Voting App
+-------------
+create-react-app voting_app
+
+ProductList-parent
+Product Child component
+
+Time_tracking_app
+-----------------------
+Structure of the app
+==========================
+Components
+
+Step 1:
+TimersDashboard(2 child component)
+	-EditableTimerList
+	-ToggleableTimerForm - props (isOpen-{true/false})
+EditableTimerList(1 child component)
+	-EdditableTimer- props (title, project, elapsed, runningSince, editForm)
+EditableTimer(2 child component)
+	-Timer
+	-TimerForm -- contains two labels and two buttons
+	the decsion for update or create timer is based on the input given by the title attribute from the EditableTimer Component
+ToggleableTimerForm
+	-TimerForm
+	This depends on the props of isOpen- if true it will show the Timer Form or else the plus button
+	
+Additional comments written in the custom-timer-app code
+
+
+Adding Timing Functionality
+========================================
+Create, Update, and Delete Timer is now in place.
+
+Adding Time Functionlity:
+
+1. Simple approace is to increase the elapsedTime on clicking the start button, but disadvantage is that after the app closed it is again initailized on reload. But we need the timer to ontinously run.
+
+2. Hence, we use the property runningSince. A timer is initailized with elapsed time with 0 and the runningSince is inititalized to start time.
+
+3. We use the React's forceUpdate method, this force the component to re-render.
+
+Notes:
+setInterval() accepts two arguments, the first is the function to be called and second is the intervale to be set
+
+Add Start Stop functionality 
+
+-> The action button at the bottom of each timer component should display "Start", it the timer is paused and "stop" if the timer is started.
+
+Add Timer Action events to Timer
+1. Modify the Timer Component, anticipating a new component called TimerActionButton. This button needs to know if the timer is running. 
+2. The TimerActionButton also propagates two events, onStartClick() and onStopClick(). These events will need to make it all way up to 	TimersDashboard which can modify the runningSince on the timer.
+
+
+Removed Elements:
+
+<div className = "ui bottom attached blue basic button">
+                        Start
+</div>
+
+//"start": "react-scripts start",
+//"test": "react-scripts test",
+//"server": "babel-node server.js",
+
+Components and Servers
+===========================
+curl -X GET localhost:3000/api/timers
+
+
+Now We add server communication
+==================================
+First create a server.js and data.json file
+
+1. The data.json file contains the following from of inormation as an array:
+[
+    {
+        "title": "Learn React",
+        "project": "Time Tracking App with API",
+        "id": "47dd9b6b-d0d1-4edb-8642-d7aa5c502de4",
+        "elapsed": 81013,
+        "runningSince": null
+    },
+    {
+        "title": "Learn Angular",
+        "project": "Shopping Cart App",
+        "id": "cffa479e-fb47-4e5d-8114-802bcff1b7d7",
+        "elapsed": 33321,
+        "runningSince": null
+    }
+]
+
+The above helps in maintaining consistency for our websites.
+2. Now we create a server.js file which contains a express server initialized. We can call the server.js as our Node.js server.
+The server.js will use the data.json as its "store". The server will read and write to this file to persist data.
+server.js will return the content of the data.json when asked for all items. When notified the server will reflect any updates, deletes or timer stops and starts 
+in data.json. This helps in data persistence.
+
+3. The server will maintain its state in the data.json file and React will maintain its state in TimersDashboard file.
+4. If we perform an operation on the React('client') state that we want to be presisted, then we also need to notify the server of that change. This will keep the two state in sync.
+	The above is the part of write operations to the server. and the operations are:
+	i. A timer is created.
+	ii. A timer is updated.
+	iii. A timer is deleted.
+	iv. A timer is started.
+	v. A timer is stopped.
+5. We'll have just one read operation: requesting all of timers from the server.
+
+Let's understand the syntax for server.js:
+// this is like import statement for express server to be used in our app
+const express = require('express')
+// import the body-parser 
+const bodyParser = require('body-parser')
+// import the node.js file system
+const fs = require('fs')
+// import the path required
+const path = require('path')
+
+// Initialize the express server
+const app = express()
+
+// reading the data file as below
+// __dirname-> given the base dir name of the app
+const DATA_FILE = path.join(__dirname, 'data.json')
+
+// set the port to be used by the  node server
+const DATA_FILE = path.join(__dirname, 'data.json');
+
+// initialize the body Parser to parse the json file
+app.use('/', express.static(path.join(__dirname, 'public')));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+// let's the server understand the header format for request and response
+app.use((req, res, next) => {
+  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+  res.setHeader('Pragma', 'no-cache');
+  res.setHeader('Expires', '0');
+  next();
+});
+
+// Getting request from the server to load the data into React
+app.get('/api/timers', (req, res) => {
+  fs.readFile(DATA_FILE, (err, data) => {
+    res.setHeader('Cache-Control', 'no-cache');
+    res.json(JSON.parse(data));
+  });
+});
+
+Explanation:
+app.get -> used to get the request of timers from the server path: '/api/timers'
+Takes 2 arguments: URI path and function expression for (req,res)
+The function expression is as follows:
+(req, res) => {
+  fs.readFile(DATA_FILE, (err, data) => {
+    res.setHeader('Cache-Control', 'no-cache');
+    res.json(JSON.parse(data));
+  });
+=> read the data.json file using the readFile function (2 args:- DATA_FILE, function expression )
+function expression:-
+-> set header using res.setHeader()
+-> send the data from the server in json format as:- res.json(JSON.parse(data));
+Conclusion: Returns a list of all timers
+// Sending response to the server as below:
+app.post('/api/timers', (req, res) => {
+  fs.readFile(DATA_FILE, (err, data) => {
+    const timers = JSON.parse(data);
+    const newTimer = {
+      title: req.body.title,
+      project: req.body.project,
+      id: req.body.id,
+      elapsed: 0,
+      runningSince: null,
+    };
+    timers.push(newTimer);
+    fs.writeFile(DATA_FILE, JSON.stringify(timers, null, 4), () => {
+      res.setHeader('Cache-Control', 'no-cache');
+      res.json(timers);
+    });
+  });
+});
+
+Explanation:
+1. app.post(DATA_FILE, function expression) -> used to post response to the server.
+2. const timers = JSON.parse(data); -> initialize the timers with the json data(JSON.parse() converts the string into a JS Array)
+3. const newTimer = {
+      title: req.body.title,
+      project: req.body.project,
+      id: req.body.id,
+      elapsed: 0,
+      runningSince: null,
+    };-> creates a new timer object in the form of json with the required data from the REact front end.
+4. timers.push(timer)-> push the json object to the timers array.
+5. Now write the data to the file as below:
+	fs.writeFile(DATA_FILE, JSON.stringify(timers, null, 4), () => {
+      res.setHeader('Cache-Control', 'no-cache');
+      res.json(timers);
+    });
+Conclusion: Accepts a JSON body with title, project, and id attributes. Will insert a new Timer object in data.json
+//Send reponse of timer start to the server.
+app.post('/api/timers/start', (req, res) => {
+  fs.readFile(DATA_FILE, (err, data) => {
+    const timers = JSON.parse(data);
+    timers.forEach((timer) => {
+      if (timer.id === req.body.id) {
+        timer.runningSince = req.body.start;
+      }
+    });
+    fs.writeFile(DATA_FILE, JSON.stringify(timers, null, 4), () => {
+      res.json({});
+    });
+  });
+});
+Conclusion:
+Accepts a JSON body with attribute id, and start (a timestamp). Searches the store(data.json) and finds the timer with the mathcin id. Sets its runningSince to start.
+
+// Send response of timer stop to the server.
+app.post('/api/timers/stop', (req, res) => {
+  fs.readFile(DATA_FILE, (err, data) => {
+    const timers = JSON.parse(data);
+    timers.forEach((timer) => {
+      if (timer.id === req.body.id) {
+        const delta = req.body.stop - timer.runningSince;
+        timer.elapsed += delta;
+        timer.runningSince = null;
+      }
+    });
+    fs.writeFile(DATA_FILE, JSON.stringify(timers, null, 4), () => {
+      res.json({});
+    });
+  });
+});
+Conclusion:
+Accepts a JSON body with attribute id and stop(a timestamp). Searches the store and finds the timer with the matching id.
+Updates the elapsed time with the delta (req.body.stop-timer.runningSince)
+Sets the runningSince to null
+
+// Sends the response to the timer to update the timer if changes mad in timer form.
+app.put('/api/timers', (req, res) => {
+  fs.readFile(DATA_FILE, (err, data) => {
+    const timers = JSON.parse(data);
+    timers.forEach((timer) => {
+      if (timer.id === req.body.id) {
+        timer.title = req.body.title;
+        timer.project = req.body.project;
+      }
+    });
+    fs.writeFile(DATA_FILE, JSON.stringify(timers, null, 4), () => {
+      res.json({});
+    });
+  });
+});
+Explanation:
+
+1. app.put-> used to update the json takes 2 args: DATA_FILE, and function expression to update the json
+2. use the forEach statement on each timer array.
+Conclusion:
+Accepts a JSON body with attribute id and title and or/ project. 
+Searches through the store and finds the timer with the matching id.
+Updates the title and/or project to new attributes.
+
+
+// Sends the reponse to the server to delete the data from the timers
+app.delete('/api/timers', (req, res) => {
+  fs.readFile(DATA_FILE, (err, data) => {
+    let timers = JSON.parse(data);
+    timers = timers.reduce((memo, timer) => {
+      if (timer.id === req.body.id) {
+        return memo;
+      } else {
+        return memo.concat(timer);
+      }
+    }, []);
+    fs.writeFile(DATA_FILE, JSON.stringify(timers, null, 4), () => {
+      res.json({});
+    });
+  });
+});
+
+Explanation:
+1. app.delete -> used delete the json takes 2 args: DATA_FILE and function expression to update the json
+2. reduce function is to remove the data from the array
+
+Conclusion:
+Accepts a JSON body with the attribute id.
+Searches through the store and deletes the timer with id matching.
+
+
+Loading State from the server
+---------------------------------
+The client.js is used to interact with the server. The request's made are asynchronous.
+The call to the client is done as follows:
+const timers = client.getTimers();
+The above will not return any list of timers, instead we can pass getTimers()a success function. getTimers() will invoke the function after it hears back from the server
+if the server successfully returns a result.
+getTimers will invoke a function with a single argument, the list of timers returned by the server.
+
+client.getTimers((serverTimers)=>());
+
+client.getTimers uses the FETCH API.
+
+The success funtion which we pass to getTimers() is called callback function
+
+Now we initialize the components state with 'timers' property set to blank array. This will allow all components to mount and perform their initial renders.
+Then we can populate the app by making a request to the server and setting the state.
+
+componentDidMount() {
+        this.loadTimersFromServer();
+        setInterval(this.loadTimersFromServer, 5000);
+      }
+    
+loadTimersFromServer = () => {
+        client.getTimers((serverTimers) => (
+            this.setState({ timers: serverTimers })
+          )
+        );
+};
+
+Explanation:
+1. Before intial render:
+	React initializes the component. state is set to an object with the property timers, a blank array is returned.
+2. The initial render:
+	React then calls render() on TimersDashboard. In order for the render to complete, EditableTimerList and ToggleableTimerForm- its two children must be rendeered
+3. Children are rendered:
+	EditableTimerList has its rendered method called. Because it was passed a blank data array , it simply produces the following HTML output:
+	<div id='timers'>
+	</div>
+	ToggleableTimerForm renders its HTML, which is '+' button.
+4. Initial render is finished
+	With this children rendered, the intial render of TimersDashboard is finished and the HTML is written to the DOM
+5. componentDidMount is invoked
+	Now that the component is mounted, componentDidMount() is called on TimersDashboard
+	The method called loadTimersFromServer(). In turn the function calls client.getTimers() which will make the HTTP request to our server,
+	requesting list of timers. When client hears back, it invokes our success function.
+	On invocation, the success function is passed one argument, serverTimers. This the array of timers returned by the server.
+	We then call the setState(), which will trigger a new render.
+	The new Render popualates our app with EditableTimer children and all of their children. The app is fully loaded and at an imperceptibly fast speed for the end user.
+6. We also do one other interesting thing is componentDidMount, we use setInterval() to ensure loadTimersFromServer() is called ever 5 seconds.
+
+Understanding Client.js:
+
+First function is :
+function getTimers(success) {
+    return fetch('/api/timers', {
+      headers: {
+        Accept: 'application/json',
+      },
+    }).then(checkStatus)
+      .then(parseJSON)
+      .then(success);
+  }
+
+Explanation:
+1. We can see in client.getTimers() the fetch accepts 2 arguments:
+	i. the path to the resource we want to fetch.
+	ii. an object of request parameters.
+- By default fetch makes a GET request, so we are telling Fetch to make a get request to /api/timers.
+- We also pass along one parameter: headers, the HTTP headers in our request. WE'are telling the server we'll accept only a JSON response.
+- Attached to the end of the fetch are a chain of .then() statements.
+	i. checkStatus(): This function is defined inside of the client.js. It checks if the server returned an error. If the checkStatus finds an error it logs it to the console.
+	ii. parseJSON(): Theis function is also defined inside of client.js. It takes the response object emitted by fetch() and returns JS object.
+	iii. success(): This is the function we pass as an argument to getTimers. getTimers will invoke the function if the server successfully returned a response.
+- Fetch returns a promise .
+-> The following is the process that happens in the then clause:
+1. When checkStatus() is called, it's passed a Fetch response object that fetch() returns.
+2. checkStatus(), after verifying the response, returns the same response object
+3. parseJSON() is invoked and passed  the response object returned by checkStatus()
+4. parseJSON() returns the JS array of timers returned by the server.
+5. success() is invoked by array timers returned by the parseJSON()
+
+function createTimer(data) {
+    return fetch('/api/timers', {
+      method: 'post',
+      body: JSON.stringify(data),
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+    }).then(checkStatus);
+  }
+Explanation:
+1. The client.createTimer fetch takes two arguments:
+	i. the path of the resource.
+	ii. an object of request parameters.
+- Here instead of the by default of the GET request, we use the method post to post the data to the server.
+- body : contains the JS array version of data from the React component.
+- We also pass along one parameter: headers, the HTTP headers in our request. WE'are telling the server we'll accept only a JSON response.
+
+The similar codes are for startTimer, stopTimer
+
+function updateTimer(data) {
+    return fetch('/api/timers', {
+      method: 'put',
+      body: JSON.stringify(data),
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+    }).then(checkStatus);
+  }
+Explanation:
+
+- This is the same as createTimer and her instead of post we use method put to update.
+
+function deleteTimer(data) {
+    return fetch('/api/timers', {
+      method: 'delete',
+      body: JSON.stringify(data),
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+    }).then(checkStatus);
+	}
+Explanation:
+
+- This is the same as createTimer and here instead of post we use delete method.
+
+The calling of the above client function is done from the TimersDashboard Component as follows:
+client.createTimer(t);=> t is the newTimer
+client.updateTimer(attrs);=> this is used to updateTimer with attrs passed after updating the attributes.
+client.deleteTimer(
+            { id: timerId }
+        );=> we pass the id timerID to delete the Timer object.
+client.startTimer(
+            { id: timerId, start: now }
+        );=> we pass the timerID and the start timer to the client function
+same for stopTimer
+
+JSX and the Virtual DOM:
+==============================
+Virtual DOM is a tree of JavaScript objects that represents the actual DOM.
+The Virtual DOM will:
+1. use efficient diffing algorithms in order to know what changed.
+2. Update Subtrees of the DOM simulataneously.
+3. batch updates to the DOM.
+
+
+Rendering a <b></b> tag in our actual DOM using React is done as follows:
+var boldElement = React.createElement('b');
+Explanation:
+1. React expects to provide a virtual DOM tree, hence we give React a set of JS objects which React will turn into a Real DOM Tree.
+2. The objects that make up the tree will be ReactElements, and to create the same we use createElement.
+3. To be visible in the front end we need to provide render() function.
+
+Rendering our ReactElement:
+------------------------------------
+1. To render this element to the actual DOM tree we need to use the ReactDOM.render() and it requires the 2 arguments:
+	i. The root of our virtual tree.
+	ii. the mount location where we want React write to actual browser DOM.
+Examples for Actual DOM:
+
+var mountElement = document.getElementById('root');
+var mountElement1 = document.querySelector('#root');
+var mountElement2 = document.querySelectorAll('#root');
+o/p:
+Returns NodeList
+var mountElement3 = $('#root');
+
+Using ReactDOM.render():
+
+var boldElement = React.createElement('b');
+var mountElement = document.querySelector('#root');
+ReactDOM.render(boldElement, mountElement);
+- This creates a new empty element into the doucment child of the mountElement i.e id:root
+
+Adding Text(with children)
+------------------------------
+1. Adding text to the <b></b> tag means we will need to create a new children of the element.
+2. The React.createElement() takes 3 arguments:
+	i. The DOM element type
+	ii. The element props
+	iii. The children of the element.
+Example: 
+var boldElement = React.createElement('b', null, 'Text (as String)');
+
+The children of the DOM element must be a ReactNode object, which is any of the following:
+i. ReactElement.
+ii. A string or a number.
+iii. An array of ReactNodes.
+
+Example:
+var mountElement = document.querySelector('#root');
+// Third argument is the inner text
+var boldElement = React.createElement('b',null,'Text(as string)');
+ReactDOM.render(boldElement, mountElement);
+3. ReactDOM.render accepts third argument as a callback function as a way to run functions after our app has started.
+
+JSX
+-------
+In JSX instead of the createElement we use this:
+
+var boldElement = <b> Text (as a String)</b>
+
+JSX Attribute Expressions
+--------------------------------
+const warningLevel = 'debug';
+const component = (<Alert color = {warningLevel === 'debug' ? 'gray':'red'
+					log = {true}/>)
+JSX conditional child expressions
+---------------------------------
+const renderAdminMenu = function(){
+	return(<MenuLink to = "/users">User Accounts</MenuLink>
+}
+
+const userLevel = this.props.userLevel;
+
+return(
+	<ul>
+		<li>Menu</li>
+		{userLevel === 'admin' && renderAdminMenu()} 
+	</ul>
+);
+
+JSX Boolean Attributes
+-----------------------
+In HTML, the presence of some attributes sets attribute to true. For instance:
+<input name = 'Name' disabled />
+
+In React we set these as booleans:
+<input name = 'Name' disabled = {true}/>
+or use JS
+let formDisabled = true;
+<input name = 'Name' disabled = {formDisabled}/>
+
+JSX spread syntax
+------------------
+Sometimes we have many props to pass a component,hence JSX has some tricks for the same.
+
+For instance:
+We have props object has two keys:
+const props = {msg: 'Hello', receipient: 'World'}
+
+We could pass each prop individually like this:
+<Component msg = {'Hello'} receipient = {'World'}/>
+
+using spread syntax:
+<Component {... props}/>
+
+JSX gotcha: class and className
+------------------------------------
+To not be ambigous with JS class attrbute hence we use className.
+
+JSX gotcha: for and htmlFor
+-------------------------------
+The for attribute of label cannot be used instead we need to use htmlFor element, the property is pass-through property that applies the attribute as for.
+
+======================================================================================
+Advanced Component Configuration with props, state and children
+======================================================================================
+1. ReactComponent
+--------------------
+There are 2 ways of defining the ReactComponent instance.
+i. React.createClass() or
+ii. ES6 class
+
+1. React.createClass syntax:
+
+import React from 'react'
+import createReactClass from 'create-react-class'
+// React.createClass
+const App = React.createClass({
+    render: function(){
+        
+    }
+})
+
+2. ES6 class way:
+import React from 'react'
+
+// ES6 style-class
+class Component extends React.Component{
+    render(){
+        
+    }
+}
+
+Explanation:
+1. render() function is a required function in the class being created.
+2. After the component is munted and created the render() method will be called.
+3. The render() function is to return the virtual DOM component.
+4. we can return a <h1></h1> element from the render function of the class. 
+
+-> Getting Data into render method
+-----------------------------------
+React provides 2 ways to pass values to render:
+1. props- arguments to our component
+2. state- to maintain state within our component
+
+props
+======
+1. Immutable pieces of data that are passed to the child component from parents .
+2. Think of them as input to our components/ they are like parameters to functions.
+
+Example:
+In App.js we write
+<StatelessHeader headerText = "Hello World"/>
+In StatelessHeader Component we use the props headerText to display as <h1> element.
+<h1>{this.props.headerText}</h1>
+
+Explanation:
+1. For every component there are props that can be set here the props is headerText
+2. The headerText is used by the Child component.
+
+propTypes
+=========
+1. Provides a way to specify the type of each props.
+2. It is a way to validate the values passed in through props.
+3. We import the prop-type package from props as below:
+	import PropTypes from 'prop-types';
+4. We define the PropTypes by setting a static class property propTypes and should be a map of prop-name keys to PropType values:
+class Map extends React.Component{
+	static propTypes = {
+		lat: PropTypes.number,
+		lng: PropTypes.number,
+		zoom: PropTypes.number,
+		place: PropTypes.object,
+		markers: PropTypes.array
+	}
+}
+
+PropType String
+-----------------------
+In Statless component we declare the name props to string as below:
+static propTypes = {
+        name: PropTypes.string
+}
+
+Now in App.js we add the props name = "Prashant Bhat"
+<StatelessHeader headerText = "Hello World" name = "Prashant Bhat"/>
+
+Validators
+----------------
+The built-in validators:
+string
+number
+boolean
+function
+object
+shape
+oneof
+instanceOf
+array
+arrayOf
+node
+element
+any
+requirement
+Note: The validators give warning when the value passed from parent does not match the values. Hence it is very important for debugging.
+The warning given is
+Warning: Failed prop type: Invalid prop `name` of type `string` supplied to `StatelessHeader`, expected `number`.
+    in StatelessHeader (at App.js:10)
+    in App (at src/index.js:9)
+    in StrictMode (at src/index.js:8)
+PropType number:
+-----------------------
+add to propTypes:
+totalCount: PropTypes.number
+then pass the totalCount from StatelessHeader component as totalCount={x}
+
+PropType boolean:
+---------------------------
+add to propTypes:
+on: PropTypes.boolean
+
+PropType function:
+-------------------------------
+add to propTypes:
+onPress: PropTypes.func
+
+PropType object
+-------------------------------
+add to propTypes:
+user: PropTypes.shape({
+	name: PropTypes.string, 
+	profile: PropTypes.string
+})
+
+Explanation:
+Allows to define the shape of the object we expect tot receive by using PropTypes.shape
+
+PropType oneOf
+---------------------------------
+level : PropTypes.onOf(['debug','info','warning','error'])
+Explanation:
+When we don't know what type of prop type will be passed we use the above.
+
+PropType Array
+---------------------
+authors: PropTypes.array
+
+Use in render as :
+<div>
+	{authors && authors.map(author =>{
+		<AuthorCard author = {author}/>
+	})}
+</div>
+------------------------------
+Default Props with getDefaultProps()
+----------------------------------------
+Sometimes we want our props to have defaults, we can use the static property defaultProps as follows:
+
+class Counter extends React.Compoent{
+	render(){
+		static defualtProps = {
+			initalValue :0
+		}
+	}
+}
+<Counter intialValue = {1}/>
+
+context
+--------------
+1. Sometimes we might have a prop type which me might feel to expose globally
+2. In this case, we might it cumbersome to pass the props from the root to every leaf through every immediate component
+3. Instead, if we specify the context allows to automatically pass down varibales from component to component.
+4. When we specify a context, React will take care of passing down context from component to component so that at any point in the tree hierarchy,
+any component can reach up to the global context where it's defined and get access to the parent's variable.
+5. In order for React to pass context from a parent component to the rest of the children we need to define 2 attributes in the parent class:
+i. childContextTypes
+ii. getChildContext
+6. To retrieve the context inside a child component, we need to define the contextTypes in the child.
+For Example:
+class Messages extends React.Component{
+	static propTypes = {
+		users: PropTypes.array.isRequired,
+		messages: PropTypes.array.isRequired
+	}
+	render(){
+		<div>
+			<ThreadList/>
+			<ChatWindow/>
+		</div>
+	}
+}
+Explanation:
+i. Without context, our Messages component will have to pass the users along with the messages to the 2 child components as follows: 
+	this.props.users and this.props.messages
+ii. To avoid this, in the Messages component we'll define 2 required properties. First the types of our context with the help of childContextTypes key.
+childContextTypes is a key value object which lists the keys as the name of the context items and the value as the PropType.
+
+Example of implementation:
+class Messages extends React.Compoent{
+	statid propTypes = {
+		users: PropTypes.array.isRequired,
+		initialActiveChatIdx: PropTypes.number,
+		messages: PropTypes.array.isRequired
+	}
+	static childContextTypes ={
+		users: PropTypes.array,
+		userMap: PropTypes.object
+	}
+}
+
+Explanation:
+i. Just like propTypes, the childContextTypes doesn't populate the context, it just defines it.
+ii. In order to fill the data the this.context object, we need to define the second required function: getChildContext().
+
+Example:
+class Messages extends React.Compoent{
+	static propTypes = {
+		users: PropTypes.array.isRequired,
+		initialActiveChatIdx: PropTypes.number,,
+		messages: PropTypes.array.isRequired
+	}
+	
+	static childContextTypes ={
+		users: PropTypes.array,
+		userMap: PropTypes.object
+	}
+	
+	getChildContext(){
+		return{
+			users: this.getUsers(),
+			userMap: this.getUserMap()
+		}
+	}
+}
+Explanation:
+The state and props of a component can change the context can changes as well.
+The getChildContext() changes everytime the state or props change on the parent component. If the context is updated, then the childrem will receive the updated 
+context aned will subsequently be re-rendered.
+
+
+Threadlist.js
+class ThreadList extends React.Compoent{
+	static contextTypes = {
+		users: PropTypes.array
+	}
+	
+	componentWillReceiveProps(nextProps, nextContext){}
+	
+	shouldComponentUpdate(nextProps, nextState, nextContext){
+	}
+	
+	componentWillUpdate(nextProps, nextState, nextContext){}
+	
+	compoenentDidUpdate(prevProps, prevState , prevContext){}
+	render(){
+		return(
+			<div className = {style.threadList}>
+				<ul className = {styles.list}>
+					{this.context.users.map((u,idx)=>{
+						return(
+							<UserListing
+								onClick = {this.props.onClick}
+								key = {idx}
+								index = {idx}
+								user = {u}
+							/>
+						)
+					})
+					}
+				</ul>
+			</div>
+		)
+	}
+}
+Note: If contextTypes is defined on a component, then several of it's lifecycle methods will be passed as an additional argument of the nextContext:
+ChatWindow.js
+class ChatWindow extends React.Component{
+	static contextTypes ={
+		userMap: PropTypes.object
+	}
+}
+
+ChatMessages.js
+class ChatMessages extends React.Component{
+	static contextTypes ={
+		userMap: PropTypes.object
+	}
+}
+
+
+ChatHeader.js
+const ChatHeader = (props, context) => {
+
+}
+In a stateless component, context will be passed as the second argument.
+
+
+
+states
+================================
+1. A component can be considered to be stateful if the the components needs to hold on to a dynamic piece of data.
+2. If the component has input that requires validation then the component can be considered stateful.
+3. Local mutable data can be considered as stateful components.
+
+Declare a state:
+
+state:{}
+
+Using the state in the component this.state.
+
+state:{payMethod: BTC}
+
+this.state.payMethod
+
+To select the payment method we need to add the clickEvent, which means we need to add the callback function
+this.setState
+select = (choice) =>{
+	return (evt) =>{
+		this.setState(
+			payMethod: choice
+		)
+	}
+}
+Here we return a new function from select which will call setState with appropriate choice.
+onClick = select(CREDITCARD)
+The attribute onClick expects a function to be passed in, but we are calling a function first because the selct function will return a function itself.
+The select returns a new function that will call the setState with the appropriate choice.
+Updating the state: When the handler function is called the component will call setState on itself which will trigger the render function to called again which will help us to see current state.payMethod.
+
+Using renderChoice method to avoid DRY principle for className ="choice"
+renderChoice = (choice) => {
+    return (
+      <div className='choice' onClick={this.select(choice)}>
+        {choice}
+      </div>
+    );
+  };
+  
+  
+Viewing the Choice
+
+renderChoice = (choice) => {
+    return (
+      <div className='choice' onClick={this.select(choice)}>
+        {choice}
+      </div>
+    );
+  };
+
+
+Stateful Components
+-------------------------------
+Defining state on our component requires us to set an instance varibale called this.state in the object prototype class.
+We set the the state in either of 2 places: property of the class or the constructor
+Setting up stateful component in this way allows us to:
+1. It allows the intitial state of our component
+2. It tells react that the component will be stateful.
+
+Setting value of props inside a component is a very bad idea , hence setting the initial value of the 'state' property is the only time when 
+we should use props while dealing with the component's state.
+
+For instance: 
+If we have a component where prop indicates a value of the component, we should apply that value to the state in the constructor() method.
+A better name for the value as prop is initialValue, indicating that the initital state of the value will be set.
+
+Example:
+
+const CounterWrapper = props => {
+	<div>
+		<Counter initialValue = {125}/>
+	</div>
+}
+
+From the usage of the <Counter> component, we know that the value of the component will simply change by the name initialValue.
+class Counter extends React.Component{
+	constructor(props){
+		super(props)
+		
+		this.state = {
+			value: this.props.value
+		}
+	}
+}
+The counter component can use the prop in constructor as shown above and since the constructor is run once and only once the component itslef is mounted and we can us it to establish our intial state.
+
+
+State Updates that depend on the current state:
+------------------------------------------------------
+We use two buttons + and - whiich when clicked calls the increment and decrement button respectively.
+
+The function definition is as below:
+
+decrement = () => {
+        this.setState(prevState => {
+            value: prevState.value - 1
+        })
+}
+
+setState() will invoke the function with previous version of the state as the first argument
+setState() is asynchronous
+
+Note: To use external customized css inside a component we need to note the following
+
+1. Add the .env variable with the following value: SKIP_PREFLIGHT_CHECK=true this is done to skip the check of WebPack Version
+2. We need to add the dependency in the package.json as follows:
+yarn add webpack webpack-cli @babel/preset-react babel-loader @babel/core @babel/preset-env @hot-loader/react-dom webpack-dev-server --dev
+3. The css file must be named as follows app.module.css
+4. You need to writeh the webpack.config.js---> Need to learn wtiting webpack
+5. use npm run first to compile the webpack.config.js
+6. use yarn start
+7. if still does not work then do this yarn build.
+
+To display which button was selected then we need a css style component to highlight the same and bolden the string.
+Hence we use the above steps and then import styles from '../app.module.css'
+
+
+Cases when we make a component stateful:
+1. Cannot be fetchde from outside
+2. Cannot be passed into a component
+
+
+Convert the switch to stateless
+-------------------------------------
+1. An alternative approach to building a stateful application is to use the stateless components.
+2. Stateless components are lightweight as they don't have any specail handlng around the component as they only use the render() method.
+3. The stateless components do not get invoked in the normal component lifecycle methods.
+4. React allows us to use PropTypes and defaultProps on the stateless components.
+5. Benefits: Minimizing stateful components and Perfromance.
+6. If we create a stateless component then we can't read from state, hence we pass the arguments down through props.
+
+For Instance:
+In Choice function we make three changes:
+1. Determine if this choice is the active one by reading the props.active
+2. When a choice is clicked, we call whtever function is on the props.onClick
+3. The label is determined by the props.label.
+
+All of theses changes decouples the Choice from the Switch statement and can be used anywhere.
+Example:
+// Create a stateless component Choice function 
+const Choice = function(props){
+    const cssClasses = []
+
+    if(props.active){
+        cssClasses.push(styles.active)
+    }
+
+    return(
+        <div className ='choice'
+            onClick = {props.onClick}
+            className = {cssClasses}
+        >
+            {props.label}
+        </div>
+    )
+    
+}
+
+
+Using it in Switch class as below:
+<div className = "switch">
+	<Choice
+		onClick = {this.select(CREDITCARD)}
+		active = {this.state.payMethod === CREDITCARD}
+		label = 'Pay with CreditCard'
+	/>
+	<Choice
+		onClick = {this.select(BTC)}
+		active = {this.state.payMethod === BTC}
+		label = 'Pay with Bitcoin'
+	/>
+	Paying with : {this.state.payMethod}
+</div>
+
+Explanation: Here we are using the Choice component and pass three props active, onClick and label
+
+
+Talking to children components with props.children
+---------------------------------------------------------------
+1. React provides us some special props like this.props.children
+2. For instance we have a Newspaper component that holds and Article as shown below:
+const Newspaper = props => {
+	return(
+		<Container>
+			<Article headline = "An intersting Article">
+				Content Here
+			</Article>
+		</Container>
+	)
+}
+
+Explanation:
+The container component above contains a single Article and the article contains the child component the text element.
+
+3. We then create the Container component with JSX for the text child component
+class Container extends React.Component {
+	render(){
+		return(
+			<div className = 'container'>
+				{this.props.children}
+			</div>
+		)
+		
+	}
+}
+
+Explanation:
+The Container component above will create a div element with className = "container" and the children of this React tree will be rendered within that div.
+Generally React will pass the this.props.children prop as the list of component if there are multiple children whereas it will pass a single element if there is one component.
+
+4. Rewriting the Container using the components with propTypes to document the API of our component
+
+class Container extends React.Component{
+	static propTypes = {
+		children: PropTypes.oneOf([
+			PropTypes.element,
+			PropTypes.array
+		])
+	}
+	
+	render(){
+		return(
+			<div className = 'container'>
+				{this.props.children}
+			</div>
+		)
+		
+	}
+}
+
+Explanation:
+1. It becomes difficult to chck the prop types every time we pass a children to the component. Hence we handle it like:
+i. Require children to be single child every time.
+ii. Use the children helper provide by React.
+
+static propTypes = {
+	children: PropTypes.element.required
+}
+
+There are 2 methods that are helper methods for handling childrens
+
+1. React.children.map() - return value of the map is an array of the result of the callback function 
+
+2. React.chilren.forEach() - this does not collect results
+
+MultiChildContainer
+class Container extends React.Component{
+	
+	static propTypes = {
+		component: PropTypes.element.isRequired,
+		children: PropType.element.isRequired
+	}
+	
+	
+	renderChild = (childData, index) => {
+		return React.createElement(
+			this.props.component,
+			{},// child props
+			childData// child's children
+		)
+	}
+	render(){
+		return(
+			<div className = 'container'>
+				{
+					React.Children.map(
+						this.props.children,
+						this.renderChild
+					)
+				}
+			</div>
+		)
+	}
+	}
+}
+
+3. React.children.toArray()- converts the props.children into Arrays
+render(){
+	const arr = React.children.toArray(this.props.children);
+	
+	return(
+		<div className = "container">
+			{arr.sort((a,b) => a.id < b.id}
+		</div>
+	)
+}
+
+
+
+
+
+
+
+
+Note: BROWSER=firefox react-scripts start
+yarn global create-react-app
+npm install										yarn add
+(N/A)											yarn add --flat
+(N/A)											yarn add --har
+npm install --no-package-lock					yarn add --no-lockfile
+(N/A)											yarn add --pure-lockfile
+npm install [package] --save					yarn add [package]
+npm install [package] --save-dev				yarn add [package] --dev
+(N/A)											yarn add [package] --peer
+npm install [package] --save-optional			yarn add [package] --optional
+npm install [package] --save-exact				yarn add [package] --exact
+(N/A)											yarn add [package] --tilde
+npm install [package] --global					yarn global add [package]
+npm update --global                  			yarn global upgrade                    
+npm rebuild										yarn add --force
+npm uninstall [package]							yarn remove [package]
+npm cache clean									yarn cache clean [package]
+rm -rf node_modules && npm install  			yarn upgrade                          
+npm version major                    			yarn version --major                  
+npm version minor                    			yarn version --minor                  
+npm version patch                    			yarn version --patch   
+
+
+
+
+
+Inside that directory, you can run several commands:
+
+  yarn start
+    Starts the development server.
+
+  yarn build
+    Bundles the app into static files for production.
+
+  yarn test
+    Starts the test runner.
+
+  yarn eject
+    Removes this tool and copies build dependencies, configuration files
+    and scripts into the app directory. If you do this, you can’t go back!
+
+We suggest that you begin by typing:
+
+  cd switch
+  yarn start
+
+Happy hacking!
+Done in 113.64s.
+
+
+
+npm install webpack webpack-cli  @babel/preset-react babel-loader @babel/core @babel/preset-env @hot-loader/react-dom webpack-dev-server --dev
+
+npm install --save-dev webpack@4 webpack-cli@2 webpack-dev-server@3
+
+npm install --save-dev babel-core@6 babel-preset-env@1 babel-loader@7
+npm install --save babel-polyfill@6
+
+yarn add react-styleguidist --dev
+ "devDependencies": {
+    "@babel/core": "^7.10.2",
+    "@babel/preset-env": "^7.10.2",
+    "@babel/preset-react": "^7.10.1",
+    "@hot-loader/react-dom": "^16.13.0",
+    "babel-loader": "^8.1.0",
+    "css-loader": "^3.5.3",
+    "style-loader": "^0.23.1",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.11",
+    "webpack-dev-server": "^3.11.0"
+  }

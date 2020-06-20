@@ -1,0 +1,37 @@
+Multitenent Container Database: localhost:1521
+Pluggable database: localhost:1521/XEPDB1
+EM Express URL: https://localhost:5500/em
+
+
+Alias                     LISTENER
+Version                   TNSLSNR for 64-bit Windows: Version 18.0.0.0.0 - Production
+Start Date                25-DEC-2019 11:54:12
+Uptime                    0 days 0 hr. 39 min. 2 sec
+Trace Level               off
+Security                  ON: Local OS Authentication
+SNMP                      OFF
+Default Service           XE
+Listener Parameter File   H:\product\18.0.0\dbhomeXE\network\admin\listener.ora
+Listener Log File         H:\product\18.0.0\diag\tnslsnr\DESKTOP-BKM4C9J\listener\alert\log.xml
+Listening Endpoints Summary...
+  (DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=DESKTOP-BKM4C9J)(PORT=1521)))
+  (DESCRIPTION=(ADDRESS=(PROTOCOL=ipc)(PIPENAME=\\.\pipe\EXTPROC1521ipc)))
+  (DESCRIPTION=(ADDRESS=(PROTOCOL=tcps)(HOST=127.0.0.1)(PORT=5500))(Security=(my_wallet_directory=H:\PRODUCT\18.0.0\admin\XE\xdb_wallet))(Presentation=HTTP)(Session=RAW))
+Services Summary...
+Service "251e8b67e3294c5ebb860fa1f5b69054" has 1 instance(s).
+  Instance "xe", status READY, has 1 handler(s) for this service...
+Service "CLRExtProc" has 1 instance(s).
+  Instance "CLRExtProc", status UNKNOWN, has 1 handler(s) for this service...
+Service "XE" has 1 instance(s).
+  Instance "xe", status READY, has 1 handler(s) for this service...
+Service "XEXDB" has 1 instance(s).
+  Instance "xe", status READY, has 1 handler(s) for this service...
+Service "xepdb1" has 1 instance(s).
+  Instance "xe", status READY, has 1 handler(s) for this service...
+The command completed successfully
+
+sqlplus system@DESKTOP-BKM4C9J:1521
+
+sqlplus system@DESKTOP-BKM4C9J:1521/XEPDB1
+
+ALTER USER C##PLSQL IDENTIFIED BY PRASHANT;

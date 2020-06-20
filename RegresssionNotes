@@ -1,0 +1,40 @@
+Course 2: Assignment House Price Prediction
+--------------------------------------------------------
+1. Load the data.
+2. Create a copy of the data loaded.
+3. Explore the data using describe() and infor method to understand the central measures.
+4. Assign the yr_built value to the yr_renovated column having 0 values
+	df['yr_renovated'] = df['yr_renovated'].mask(df['yr_renovated']==0).fillna(df['yr_built]')
+5. 
+Syntax for creating a heatmap:
+columns = ['bedrooms', 'bathrooms', 'sqft_living','sqft_lot', 'floors', 'waterfront', 'view', 'condition', 'grade','sqft_above', 'sqft_basement', 'sqft_living15', 'sqft_lot15','price']
+Set the layout of the map
+fig, ax = plt.subplots(figsize = (20,10))
+ax = sns.heatmap(train_data[columns].corr(), vmin = 1, vmax = 1, cmap = 'sesmic' linewidths = 0.2 annot = True,ax = ax)
+ylim = ax.set_ylim(15,0)
+
+Plot the price variable for the each year the house was built
+ax = train_data[['yr_built', 'price']].groupby(['yr_built]).median().plot()
+xticks = ax.set_xticks(ax.get_xticks)
+
+
+Syntax for Modelling
+
+from sklearn.linear_model import LinearRegression
+from sklearn import metrics
+numerical_cols = ['sqft_living']
+trainset = trainset[numerical_cols]
+
+X = trainset
+y = train_data['price']
+
+# Split the data into train and test
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 0)
+
+# Learn a linear regression model on train_set
+regressor = LinearRegression().fit(X_train, y_train)
+
+Predict on test set
+
+y_pred = regressor.predict(X_test)
+print('Root Mean Squared Error:', np.sqrt(metrics.mean_squared_error(np.log(y_test), np.log(y_pred))))

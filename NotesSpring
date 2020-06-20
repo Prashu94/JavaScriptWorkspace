@@ -1,0 +1,12 @@
+<exclusions>
+        <!-- Exclude the Tomcat dependency -->
+        <exclusion>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+        </exclusion>
+    </exclusions>
+spring.main.web-application-type=none
+server.port=0.
+
+Remember : Services has to be stateless
+Hence avoid saving state in the Services Class

@@ -1,0 +1,140 @@
+Block Structure
+================
+Anonymous Block Structure:
+-----------------------------
+	Declaration Block
+		Execution Block
+			Declaration Block
+			Execution Block
+			Exception Block
+		Exception Block
+Explanation:
+1. Declaration Section contains the variable definitions and declarations, user defined PLSQL type definitions, cursor definitions, reference cursor definitions,
+	local function or local procedure definitions.
+2. Execution Section contains varibale assignments, object initializations, conditional structures, iterative structures, nested anonymous PL/SQL blocks,
+	or calls to local or stored named PL/SQL blocks.
+3. Exception Section contains error handling phrases that can use all of the same items as the execution section.
+
+Basic Block Structure:
+-------------------------
+Syntax:
+	BEGIN
+		NULL;
+	END;
+	/
+Explanation:
+1. The above is an execution block which does nothing.
+2. The slash at the end is a cue for the PLSQL Engine to run the execution block.
+3. A block without an execution statement raises and exception becuase PL/SQL doesn't support an empty block.
+ 
+Example for Hello World Present in : H:\OracleWorkSpace\MyExercise\Chapter3\script_collection.sql
+
+PL/SQL supports 2 types of programs: Anonymous Block programs and Named Block Programs, and both of them have declaration, execution and exception handling blocks.
+
+Anonymous Blocks support batch scripting, which is a collection of SQL statements and are run as a program unit.
+Named Blocks are stored programming units.
+
+Oracle let's use use session or bind variable which are similar to substitution variables in anonymous PL/SQL bolcks.
+
+Exception Block
+-------------------
+1. Exception Blocks manage raised runtime errors, and generic exception handler manages any raised error.
+2. We use a WHEN block to catch an error, and you see WHEN OTHERS block to catch any other error in the program unit.
+
+Behaviour of varibales in Blocks
+---------------------------------
+Anonymous Blocks:
+1. Declaring a number variable without explicitly assigning the variable causes the the initial value to be null because the declartion blocks does 2 things:
+	i. Defines a variable by giving it a name and data type.
+	ii. Assigns an implicit null value to the variable.
+Nested Anonymous Blocks:
+1. Nested anonymous blocks have read and write privileges to variables defined in the outer scope. Hence the outer value can be assigned a new value in the nested blocks and the same will be printed outside the block too.
+2. Autonomous block with a nested anonymous block
+==>	The program prints the initial values of the lv_outer and lv_active variables before
+entering the anonymous nested block. Next, the program prints the variable values after the
+nested block’s declaration section. Notice that only the lv_active value has changed because
+its scope uses the value from the declaration block of the nested anonymous block. After the
+assignment of INNER to the lv_outer variable, both lv_outer and lv_active hold the
+INNER string value. The lv_active variable changes back to OUTER after exiting the nested
+anonymous block because it now refers to the outer anonymous block program.
+
+Local Named Blocks:
+There are 2 types of named block program:
+i. Functions - return a value and is typically used as right operand in right to left assignment
+ii. Procedures- does not return a value, equivalent to method in Java returning void.
+
+Local functions and procedures are only useful in the scope of the program unit where they are embedded.
+We can implement local functions in the declaration section of an anonymous block or named block.
+
+Stored Named Blocks:
+1. They are subroutines viz: functions and preocedures and are often called schema level function or procedures.
+2. Stored Functions return a value while a Stored Procedure doesn't return any value.
+
+
+Basic Scalar and Composite Data Types
+==========================================
+1. Scalar Data Types
+--------------------------
+i. String: 2 principal varities(fixed sized (CHAR) and dynamically sized(VARCHAR2(20) NVARCHAR2(20))
+ii. Dates: 
+a. Date data type is the base type for dates, times and intervals
+b. Oracle has 2 date masks:
+	Default : DD-MON-RR
+	Four Digit Year: DD-MON-YYYY
+iii. Numbers: Define number as constrained or unconstrained data type.
+
+2. Attribute and Table Anchoring
+--------------------------------------
+i. Attribute anchoring lets you anchor the data type in a program to a column in the table.
+ii. Table anchoring lets you anchor composite variable, like a RECORD type, to a table or cursor structure.
+
+%TYPE: Anchors a variable to the column in a table or cursor.
+%ROWTYPE: Anchors a composite a variable to a table or cursor structure.
+Three possibilities for anchoring composite data types:
+i. Assign the record structure of a table as data type of a variable.
+ii. Assign the recors structure of a cursor or system cursor variable as data type of a variable.
+
+3. Composite Data Types
+----------------------------
+i. Composite Data Types can hold a structure of data, which is more or less like a row of data.
+The types of composite data type available are:
+
+SQL UDT:This can hold a data structure. Two implementations are possible: an object
+type only implementation, which supports a SQL-level record structure, and both an
+object type and body implementation, which supports a class instance.
+
+PLSQL record type:This can hold a structure of data, like its SQL UDT cousin. You can
+implement it by anchoring the data type of elements to columns in tables and views, or
+you can explicitly define it. You should consider explicit declarations, because nesting
+these types doesn’t work well. An explicitly declared record type is much easier for
+developers to understand than types that anchor to tables with nested data types.
+
+SQL Collection:
+This can hold a list of any scalar SQL data type. SQL collections of
+scalar variables are Attribute Data Types (ADTs) and have different behaviors than
+collections of UDTs. You have two possibilities with SQL collections: A varray behaves
+virtually like a standard array in any procedure or object-oriented programming
+language. It has a fixed number of elements in the list when you define it as a UDT. The
+other possibility, a nested table, behaves like a list in standard programming languages. It
+doesn’t have a fixed number of elements at definition and can scale to meet your runtime
+needs within your PGA memory constraints.
+
+PL/SQL Collection:
+This can hold a list of any scalar SQL data type or record type, and it
+can also hold a list of any PL/SQL record type. Unlike with the other collections, you’re
+not limited to a numeric index value. You can also use a string as the index value. This
+is aptly named for that duality of character as an associative array. Many experienced
+programmers still call this a PL/SQL table, as established in the Oracle 8 Database
+documentation.
+
+SQL UDT Example Explanation:
+1. SQL UDT is an object type and like packages the object types have specification and body.
+2. The specification is the type and contains list of attributes and methods.
+3. Object types publish the blueprint of the object to the schema and guarantee what the object body will implement, You can define an object final but for other object to use the same we do INSTANTIABLE as not final.
+
+PL/SQL Record Type:
+1. Consider it as row of data accross 2 or more fields of data.
+
+SQL Collection Example Explanation:
+
+

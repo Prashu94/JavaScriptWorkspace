@@ -1,0 +1,3394 @@
+Chapter 2:
+----------------------
+
+Execution Context: 
+A box, a container, or a wrapper which stores variables and in which piece of our code is evaluated or executed
+
+
+Global Context (The Default Context):
+
+-Code that is not inside any function 
+-Associated with the global object
+-In the browser, that's the window object (lastName === window.lastName)
+
+Each time we call a function it gets it brand new execution context
+
+
+Example:
+
+var name = 'John' 
+
+function first(){
+	var a = 'Hello!'
+	second()
+	var x = a + name
+}
+
+function second(){
+	var b = 'Hi!'
+	third()
+	var z = b + name
+}
+
+function third(){
+	var c = 'Hey!'
+	var z = c + name
+}
+
+first()
+
+Explanation of JavaScript views and executes the above code:
+
+Execution Context
+-> Global Execution Context (name, first(), second(), third())
+-> when first() called a new execution context is called
+
+Execution Context-> first() => the first method then calls the second() function 
+Execution Context-> second() => the second method then calls the third() function
+Execution Context-> third() => (var c and var z)
+
+After the control return from the current function then the execution context is popped.
+third()- popped
+second()- popped
+first()- popped
+current context global context
+
+
+---------------------------------------------------------------------
+Execution Context in Detail
+---------------------------------
+Execution Context object:
+Variable Object
+Scope Chain
+"This" variable
+
+1. Creation phase - 
+	A) Creation of the VO
+	B) Creation of the scope chain
+	C) Determine the value of 'this' variable
+	
+2. Execution Phase -
+	The code of the function that generated the current execution context is ran line by line
+
+
+The Variable Object
+===================
+-The argument of the object is created, containing all the arguments that were passed into the function
+Hoisting( they are available before the execution phase starts)- function is called before declarations
+-Code is scanned for function decalrations: for each function a property is created in the VO , pointing to the function
+-Code is scanned for variable decalrations: for each variable, a property is created in VO, and set to undefined
+
+Note: The Hoisting works with function decalration, but not with function expressions as it throws the error: 
+Uncaught TypeError: retirement is not a function
+
+Hoisting with variables:
+throws error : script.js:21 Uncaught ReferenceError: age is not defined when the var is ot defined.
+Or if defined and the variable is accessed before decalration then it shows undefined
+
+
+Scoping in JavaScript
+=====================
+-Tells us where we can access certain variables.
+-Each function creates a scope: the space/environment, in which variables it defines are accessible
+-Lexical Scoping: a function that is lexically within aother function gets access to the scope of the outer function
+
+Note: 
+Execution Stack- order in which function is called
+Scope Chain - order in which functions are lexically written
+
+The 'this' keyword
+==================
+- Regular Function Call: the 'this keyword points at the global object(the window object, in the browser)
+- Method Call: the this variable points to the object that is calling the method
+- The this keyword is not assigned a value until a function where it is defined is actually called
+===============================================================================================================
+Chapter 4: DOM Manipulation and Events
+-----------------------------------------
+
+The DOM and DOM Manipulation
+------------------------------
+
+DOM: Document Object Model
+- Structured Representation of an HTML document
+- DOM is used to connnect webpages to script like JavaScript
+- For each HTML box, there is an object in the DOM that we can access and interact with
+
+=> PIG GAME Project using Javascript
+
+- How to create fundamental game varibales
+- How to generate a random number
+- How to Manipulate the DOM
+- How to read from the DOM
+- How to change the CSS styles
+
+
+What are events?
+
+- Events: Notifications that are sent to notify the code that something has happened on the webpage
+Examples: Clicking button, resizing the window
+- EventListener: A function that performs an action based on a certain event, it waitts for a specific event to happen.
+
+
+How are events processed?
+
+Rule: An even can be processed or handled when the execution stack is empty(which menas only after all the function are returned)
+
+Message Queue: Events are put here.
+The message is popped from the queue and put on the execution stack for execution
+
+- How to set up an event handler
+- What a callback function is
+- What an anonymous function is 
+- Another way to select element by id
+- How to change the image in the <img> element
+
+(https://developer.mozilla.org/en-US/docs/Web/Events)
+
+
+-How to use functions to correctly apply the DRY principle
+-How to think about the game logic like a programmer
+
+===============================================================================================================
+Chapter 5 : Advanced JS: Objects and Functions
+Objects in JavaScript
+
+1. Everything is an object
+2. Primitve Objects:{Numbers, String, Booleans,Undefined, Null}
+3. Everything Else: {Arrays, Functions, Objects, Dates, Wrappers fro Numbers, String, Booleans} is an object
+
+Example of Objects in Javascript:
+var john ={
+	name: 'John',
+	yearOfBirth: 1990,
+	isMarried: false
+}
+Constructors and Instance in JavaScript:
+
+Constructor:
+
+Person{name: '', yearOfBirth: '', job: '',calculateAge()}
+
+Based on the above constructor many instace variables can be formed:
+var john ={
+	name: 'John',
+	yearOfBirth: 1990,
+	isMarried: false
+}
+
+Inheritance:
+When one object is based on another objects. Means the child object can inherit theproperties and functions of the parent method,
+
+For instance:
+Constructor:
+Person{name: '', yearOfBirth: '', job: '',calculateAge()}
+Athelete{olympics:'', olympicMedals:'', allowedOlympics()} inherit Person class
+
+
+===========================================================================================================================
+Prototype and Prototype Chains
+JavaScript is a prototype based langauge.
+Person{name: '', yearOfBirth: '', job: '',Prototype(calculateAge())}
+
+If we need to inherit a particular property from the parent class we need to define the prorotype in the parent class.
+The person prototype property is the prototype of the John object which inherits Person object.
+Person object itself is an instance of even bigger constructor Object object.
+
+Object object contains the following:
+Prototype:
+1. hasOwnProperty
+2. isPrototype
+3. constructor
+4. toString
+5. valueOf
+
+Prototype Chain:
+1. John which inherits Parent looks for a particular function in Parent object, if it does not find, then searches the Object object.
+2. If the Object object does not contain the method then null (undefined) is returned.
+
+The Prototye property of an object is where we put the methods and properties that we want other objects to inherit.
+The Constructor prorotype is not the prototype of the Constructor itslef but the prototype of ALL instances that are created through it.
+john.hasOwnProperty('job')// true
+john.hasOwnProperty('lastName') //false - because it is the property of Person object.
+
+
+Object.create builds an object that inherits directlyy from the on that we passed into the first argument.
+Function Constructor the newly create objects inherits from the constructor's prorotype property.
+
+Primitives and Objects:
+
+Primitives:
+-> Holds the values inside the variable itself
+Objects:
+-> Objects are just being refered to by the reference pointed to by the variable
+
+Understanding what an object created with function Constructor looks like alongwith the prototype
+
+This is the function constructor:
+
+var Person1 = function(name, yearOfBirth, job){
+    this.name = name;
+    this.yearOfBirth = yearOfBirth;
+    this.job = job
+}
+
+This is the Prototype that contains the function
+Person1.prototype.calculateAge =
+    function(){
+    console.log(2020-this.yearOfBirth)
+};
+
+This is the prototype used for properties:
+
+Person1.prototype.lastName = 'Queen';
+
+Instantaiting the function constructor:
+
+var oliver = new Person1('Oliver', 1985, 'Vigilante');// Object
+
+In console when we inspect the object oliver we find the following:
+
+oliver
+o/p:
+Person1{name: "Oliver", yearOfBirth:1985, job:'vigilante'}
+job: "Vigilante"
+name:"Oliver"
+yearOfBirth:1985
+
+__proto__:
+	calculateAge:f()
+		arguments: null
+		caller: null
+		length: 0
+		name:""
+		prototype:
+			constructor:f()
+			arguments: null
+			caller: null
+			length: 0
+			name:""
+			__proto__:
+			constructor:Object()
+	lastName:'Queen'
+	constructor: f(name, yearOfBirth, job)
+	
+Object.create function way to create objects
+1. create a prototype as:
+
+var personProto = {
+    calculateAge: function(){
+        console.log(2020-this.yearOfBirth)
+    }
+};
+
+2. pass the values for the object as second arguments as follows:
+
+var jane = Object.create(personProto, {
+    name: {value : 'Jane'},
+    yearOfBirth: {value: 1969},
+    job: {value: 'Designer'}
+});
+
+Difference between Object.Create and function constructor is:
+
+1. Object.create builds an object that inherits directly from one that we passed into the first argument.
+2. Function Constructor, the newly created objects inherits from the constructor's prorotype property.
+
+First Class Functions: Passing functions as arguments
+=========================================================
+Functions are also objects in JavaScript
+
+1. A function is an instance of the Object type
+2. A function behaves as any other object
+3. We can store functions in a variable
+4. We can pass a function as an argument to another function
+5. We can return a function from a function
+
+Hence, in JS we have first class functions
+
+
+Closures:
+============
+function retirement(retirementAge){
+    var a = ' Years Left Until Retirement';
+    return function(yearOfBirth){
+        var age = 2020-yearOfBirth;
+        console.log((retirementAge-age)+a);
+    }
+}
+retirement(58)(1994);
+
+Explanation of the above code:
+
+1. The excution context for retirement() is loaded-> initialize the age string and then returns the function
+	-Gloabl Scope
+		-scope retirementAge = 66
+		-var a 
+		- Execution Context for the function is now started
+			-New scope generated with additional varibales
+		
+2. The surprise part is the return function ia able to use the retirementAge and the var a 
+
+An inner function has always access to the variables and parameters of its outer function, even after the outer function has returned.
+Even though the execution context is popped from the execution stack the varibales are not removed from the scope in the memory.
+
+=======================================================================================
+
+Budget App Plan
+
+=======================================================================================
+
+
+Step 1: Break the code in to modules
+
+To Do List for this step:
+1. Add Event Handler
+2. Get input values
+3. Add the new item to the data structure
+4. Add the new item to the UI
+5. Calculate the budget
+6. Update the UI
+
+
+Dividing into modules:
+
+UI Moudules:
+1. Get input values
+2. Add the new item to the UI
+3. Update the UI
+
+Data Modules:
+1. Add the new item to the data structure
+2. Calculate the budget
+
+Constroller Module:
+1. Add Event Handler
+
+Implementing Module Pattern: Learn more about private and public data encapsulation and seperation of concerns.
+
+
+1. Create an object budgetController which controls the budgetData
+2. The object must be an IIFE function as below:
+
+var budgetController = (function(){
+    var x = 23;
+    
+    var add = function(a){
+        return x+a;
+    }
+    
+    return {
+        publicTest : function(b){
+            console.log(add(b));
+        }
+    }
+})();
+
+Explanation:
+
+The above function safeguards the varibale form being used outside the function
+The varaiables above cannot be accessd from the global scope.
+Now to add value to x we cannot directly call the add function.
+Hence, we need to return a publicTest function which will call the add function with parameters to add the value with x
+
+3. Create an object UIController which will control the UI data, but if we need the budget data to be accessed here we cannot as these two are independent components
+4. Hence we create a new object controller which will help connect the two.
+
+//Generic controller
+// pass the object for above two
+var controller = (function(budgetCtrl, UICtrl){
+    var z = budgetCtrl.publicTest(5);
+    return{
+        anotherPublic: function(){
+            console.log(z);
+        }
+    }
+})(budgetController, UIController);
+
+Setting Up the First Event Listeners:
+1. We write the code for even listeners in controller object.
+
+var controller = (function(budgetCtrl, UICtrl){
+    // Add event listener
+    
+    var ctrlAddItem = function(){
+        // 1. Get Input field Data
+        
+        // 2. Add the item to the budget controller
+        
+        // 3. Add the new item to the user interface 
+        
+        // 4. Calculate the budget
+        
+        // 5. Display the budget on the UI
+        console.log("It works.");
+    }
+    document.querySelector('.add__btn').addEventListener('click', ctrlAddItem);
+    
+    //keypress event is for any key pressed
+    document.addEventListener('keypress', function(event){
+        //console.log(event);
+        // We use the key code from the keypress event to check if the enter key was pressed
+        if (event.keyCode === 13 || event.which === 13){
+            //console.log("ENTER was pressed");
+            ctrlAddItem();    
+        }
+    })
+})(budgetController, UIController);
+
+Explanation:
+
+1. When user presses the add-btn then ctrlAddItem function must be called to do the required actions.
+2. When the user presss the enter Key we use the document.addEventListener directly for the keypress event.
+3. To check whether the keypress event is enter button=> the keycode is 13 after which the ctrlAddButton is called.
+
+
+Reading Input Data:
+
+1. We need to get the input values from the select box, add description box and the value box, hence this is a part of the UI so we do the following:
+
+var UIController = (function(){
+    
+    // 2. As there will be many doucmentSeclectors, hence to manage UI changes
+    // we do the following which will be centralized
+    var DOMStrings = {
+        inputType: '.add__type',
+        inputDescription: '.add__description',
+        inputValue: '.add__value',
+        inputBtn: '.add__btn'
+        
+    }
+    // 1. return method to get the input value
+    return {
+        getInput: function(){
+            return {
+                type: document.querySelector(DOMStrings.inputType).value, // either 'inc' or 'exp'
+                description:  document.querySelector(DOMStrings.inputDescription).value,
+                value: document.querySelector(DOMStrings.inputValue).value
+            };
+        },
+        getDOMStrings: function(){
+            return DOMStrings;
+        }
+    };
+    
+})();
+
+Expalanation:
+1. We return the getInput object as per IIFE rules consisting of the type, description, value 
+2. We use the .class_name repeateldly in the document.querySelector method and to avoid clashes with ui changes we centralize the same as a object which contains the DOM strings
+3. Now there is a add_btn class being used in the controller so we need to use the DOMString in th UIController, hence we do the following:
+	i. add a new method in the return of the UIController named getDOMStrings that will return the DOMStrings object.
+	ii. we add the inputBtn in the DOMStrings for the required class.
+	iii. we store the return value as below:
+		var DOM = UICtrl.getDOMStrings();
+		and use the DOM.inputBtn
+
+
+Creation of initialization function:
+In the previous section the event listeners are scattered aroud in the controller section, hence to follow the principle fo DRY
+we create the setupEventListener function as follows:
+
+var setupEventListeners = function(){
+        
+        var DOM = UICtrl.getDOMStrings();
+        
+        document.querySelector(DOM.inputBtn).addEventListener('click', ctrlAddItem);
+    
+        //keypress event is for any key pressed
+        document.addEventListener('keypress', function(event){
+            //console.log(event);
+            // We use the key code from the keypress event to check if the enter key was pressed
+            if (event.keyCode === 13 || event.which === 13){
+                //console.log("ENTER was pressed");
+            ctrlAddItem();    
+            }
+        });
+    }
+As this is inside an IIFE we cannot directly call the function hence we create a return object 
+as follows:
+
+return {
+        init: function(){
+            console.log("Application has started.");
+            //call the eventListeners
+            setupEventListeners();
+        }   
+    };
+
+And the same will be called as 
+controller.init();
+
+Creating Income and Expense Function constructor
+Now we move on to the budgetController where we create the data model or you an say the busines logic.
+
+We create 2 function constructor for Expenses and Income as below:
+
+var Expense  = function(id, description, value){
+        this.id = id;
+        this.description = description;
+        this.value = value;
+    };
+    
+    
+    // Income Function Constructor
+    var Income  = function(id, description, value){
+        this.id = id;
+        this.description = description;
+        this.value = value;
+    };
+
+We then create a commmon data structure to store the value of all the objects being create for the above constructors as below:
+
+ var data = {
+        allItems: {
+            exp: [],
+            inc: []
+        },
+        totals:{
+            exp:0,
+            inc:0
+        }
+        
+    };
+
+Adding new item to our budget controller
+
+The actions we need to when we click on add button in the UI after providing the type, desc and value.
+
+We create a return method which contains public functions that return the element after addition in the above function constructors.
+
+The code written is as :
+return {
+        addItem: function(type, des, val){
+            var newItem;
+            // ID = ID+1
+            
+            if (data.allItems[type].length > 0){
+                ID = data.allItems[type][data.allItems[type].length - 1].id + 1;
+            }else{
+                ID =0 ;
+            }
+            //create a new item based on inc/exp type
+            if (type === 'exp'){
+                newItem = new Expense(ID, des, val);    
+            }else if (type === 'inc'){
+                newItem = new Income(ID, des, val);
+            }
+            
+            //Push into the data structure 
+            data.allItems[type].push(newItem);
+            // Return new element
+            return newItem;
+        },
+        testing: function(){
+            console.log(data);
+        }
+        
+    };
+	
+Explanation:
+1. The addItem function takes the argument as type(inc/exp), desc, val
+2. We create a object for the item to be added as per the condition of the type variable as:
+	newItem = new Expense(ID, des, val)
+	or newItem = new Income(ID, des, val)
+3. The code for the same is as follows:
+	if (type === 'exp'){
+                newItem = new Expense(ID, des, val);    
+            }else if (type === 'inc'){
+                newItem = new Income(ID, des, val);
+            }
+4. The object contains the ID attribute passed to Expense and the Income object, hence we create the object based on the last value at the index of inc/exp data.
+
+	This is as follows:
+	ID = data.allItems[type][data.allItems[type].length-1].id+1
+	
+	Breaking down the above as:
+	Consider the inc type array in the data as follows:
+	data{
+		allItems : {
+			inc : [new Income(0, 'Test1', 123), new Income(1, 'Test2', 345)],
+			exp: []
+		}
+	}
+	type = inc
+	data.allItems['inc'][data.allItems['inc'].length-1].id+1
+	
+5. The avoid the undefined value for the empty array initially, we do the following:
+	if (data.allItems[type].length > 0){
+                ID = data.allItems[type][data.allItems[type].length - 1].id + 1;
+            }else{
+                ID =0 ;
+            }
+			
+6. Pushing the data into the respective array in the data object of allItems as:
+	data.allItems[type].push(newItem);
+	
+Adding the item to the budgetController from the controller object as follows:
+newItem = budgetCtrl.addItem(input.type, input.description,input.value );
+
+
+Adding the new Item to th UI:
+-> techiques to add big chunks of HTML into the DOM
+-> Replace part of a string
+-> DOM manipulation using the insertAdjacentHTML method.
+
+
+Adding big chunks of HTML into the DOM
+
+1. We have to use the UIController to control the UI elements, hence we have to write one more public metho in the return of the UIController as follows:
+
+addListItem: function(obj, type){
+            var html, element;
+            // Create an HTML string with placeholder
+            if (type === 'inc'){
+                element = DOMStrings.incomeContainer;
+                
+                html = '<div class="item clearfix" id="income-%id%"><div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">%value%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>';
+            }else if (type === 'exp'){
+                element = DOMStrings.expenseContainer;
+                
+                html = '<div class="item clearfix" id="income-%id%"><div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">%value%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>';
+            }
+            // Replace the placeholder text with some actual data
+            newHtml = html.replace('%id%', obj.id);
+            newHtml = newHtml.replace('%description%', obj.description);
+            newHtml = newHtml.replace('%value%', obj.value);
+            
+            // Insert the HTML into DOM.
+            document.querySelector(element).insertAdjacentHTML('beforeend', newHtml);
+        }
+		
+Explanation:
+1. we see the html content below the the income__list. expenses_list div element and we hardcode the same an store in the html variable.
+2. The toggling should happen between the type given to the function.
+3. Replace the id, description and value text as %id%, %description%, %value%.
+4. Now the hard-coded value has to be reomved using the string function replace as follows:
+	newHtml = html.replace('%id%', obj.id);
+    newHtml = newHtml.replace('%description%', obj.description);
+    newHtml = newHtml.replace('%value%', obj.value);
+5. we need the querySelector so as to place the html value in the DOM. So we use the below:
+	element = DOMStrings.incomeContainer; or element = DOMStrings.expenseContainer;
+6. Now we insert to DOM as:
+	document.querySelector(element).insertAdjacentHTML('beforeend', newHtml);
+	
+	
+2. We need to call the function from the controller with the args obj(inc/exp) and the type of object as follows:
+	UICtrl.addListItem(newItem, input.type);
+
+Clearing our input fields:
+-> how to clear html fields
+-> how to use querySelectorAll
+-> how to convert list to an array
+-> A better way to loop over an array than for loops: foreach
+
+To clear the fields of the description and the value we need to add one more public method to the return of the UIController as follows:
+
+clearFields: function(){
+            var fields, fieldsArr;
+            // using querySelectorAll
+            // returns a list
+            fields = document.querySelectorAll(DOMStrings.inputDescription + ', ' + DOMStrings.inputValue);
+            
+            // convert the fields (list) into arrays
+            // the call method will rep
+            fieldsArr = Array.prototype.slice.call(fields);
+            
+            // foreach method
+            fieldsArr.forEach(function(current, index, array){
+                current.value = "";
+                current.description = "";
+            });
+            
+            fieldsArr[0].focus();
+        }
+		
+Explanation:
+1. We use the querySelectorAll to select all the DOMStrings of description and inputValue.
+2. Store the same in the fields variable.
+3. The characteristics of the querySelectorAll is the it returns the list type
+	As the list type does not contain the methods of the array.
+4. We hence convert the list to an array using the following:
+	fieldsArr = Array.prototype.slice.call(fields);
+	
+	Array.prototype.slice.call(fields) => slice is a method of Array Class and since slice is a method we can use the call to replace the this with fields
+	Which means using the Array prorotype methods for list named fields.
+5. With foreach method we can clear the value of both current.value and current.description as follows:
+	fieldsArr.forEach(function(current, index, array){
+                current.value = "";
+                current.description = "";
+            });
+6. To get the focus we do the following : fieldsArr[0].focus();
+
+Updating the Budget Controller
+-> how to convert field inputs to numbers
+-> how to prevent false inputs
+
+We write a update budget function in the controller part as follows
+var updateBudget = function(){
+        
+        // 1. Calculate the budget
+        
+        // 2. return the budget
+        
+        // 3. Display the budget on the UI
+    }
+
+Before we update the budget we have to be rest asssured that the value field is not blank, the desciption field is not blank
+Hence we first onvert the input.value to Float in the UIcontroller return block
+as follows:
+value: parseFloat(document.querySelector(DOMStrings.inputValue).value)
+
+
+Now to filter the NA and blank values we do the following:
+if (input.description !== "" && !isNaN(input.value) && input.value>0){
+            // 2. Add the item to the budget controller
+            newItem = budgetCtrl.addItem(input.type, input.description,input.value );
+            //budgetCtrl.testing();
+        
+            // 3. Add the new item to the user interface 
+            UICtrl.addListItem(newItem, input.type);
+        
+            // 4. Clear the fields
+            UICtrl.clearFields();
+        
+            // 5. Calculate and then update the budget
+            updateBudget();
+        }
+		
+Updating The Budget Constroller part2:
+-> how and why to create simple, reusable functions with only one purpose
+-> how to sum all elements of an array using the forEach method
+
+
+We add a new private function in the budget controller named: calculateTotal as follows
+var calculateTotal = function(type){
+        var sum = 0;
+        data.allItems[type].forEach(function(current){
+            sum += current.value;
+        });
+        
+        data.totals[type] = sum;
+    };
+	
+Explanation:
+1. calculateTotal is used to sum the value of the income and expenses_list
+2. the way to do this is :
+	data.allItems[type].forEach(function(current){
+            sum += current.value;
+        });
+Now second we create a public function for calculating the budget:
+
+calculateBudget: function(){
+            
+            // 1. calculate the total income and expenses.
+            calculateTotal('exp');
+            calculateTotal('inc');
+            
+            // 2. Calculate the budget: income-expenses.
+            data.budget = data.totals.inc-data.totals.exp;
+            
+            // 3. calculate the percentage of income that we spent.
+            if (data.inc>0){
+                data.percentage = Math.round((data.totals.exp / data.totals.inc)*100);
+            }else{
+                data.percentage = -1;
+            }
+            
+        }
+		
+Explanation:
+1. call the function calculateTotal for both expenses and income to calculate the total income and expenses.
+2. now we calculate the budget i.e income-expenses
+3. we also calculate the percentage of the income spent.
+
+Also, we initialize the budget, percentage in the data object in the budget controller.
+
+To retreive the result from the budget controller we use the following:
+
+getBudget: function(){
+          return{
+              budget: data.budget,
+              totalInc: data.totals.inc,
+              totalExp: data.totals.exp,
+              percentage: data.percentage
+          }  
+        }
+		
+We then add a update budget function  which will call all the above functions as follows:
+
+var updateBudget = function(){
+        
+        // 1. Calculate the budget
+        budgetCtrl.calculateBudget();
+        
+        // 2. return the budget
+        var budget = budgetCtrl.getBudget();
+        
+        // 3. Display the budget on the UI
+        console.log(budget);
+    }
+	
+Update the Budget: UI controller
+
+We now need to display the calculated budget above in the UI and hence we create a public method in the UICtrl displayBudget as below:
+displayBudget:function(obj){
+            document.querySelector(DOMStrings.budgetLabel).textContent = obj.budget;
+            document.querySelector(DOMStrings.incomeLabel).textContent = obj.totalInc;
+            document.querySelector(DOMStrings.expensesLabel).textContent = obj.totalExp;
+            
+            if (obj.percentage > 0){
+                document.querySelector(DOMStrings.percentageLabel).textContent = obj.percentage+'%';    
+            }else{
+                document.querySelector(DOMStrings.percentageLabel).textContent = '---';
+            }
+        }
+Explanation:
+1. The document.querySelector will select the DOMStrings from the one defined as below:
+	var DOMStrings = {
+        inputType: '.add__type',
+        inputDescription: '.add__description',
+        inputValue: '.add__value',
+        inputBtn: '.add__btn',
+        incomeContainer: '.income__list',
+        expenseContainer: '.expenses__list',
+        budgetLabel:'.budget__value',
+        incomeLabel:'.budget__income--value',
+        expensesLabel:'.budget__expenses--value',
+        percentageLabel:'.budget__expenses--percentage'
+    }
+2. To remove -1 from the percentage div element we put the if condition as above
+3. Now we call the function from the controller object and the updateBudget function as below:
+	UICtrl.displayBudget(budget);
+4. The top level div element contains garbage values hence we do the following:
+	UICtrl.displayBudget({
+              budget: 0,
+              totalInc:0,
+              totalExp: 0,
+              percentage: -1
+            });
+
+
+Part 2 Architecture:
+============================
+
+Concepts:
+
+Event Bubbling:
+-------------------
+Consider the following html:
+
+<main>
+	<section>
+		<p/>
+		<p>Text <button>link</button></p>
+	</section>
+</main>
+
+When the button element is clicked the event is bubbled up the whole tree from p->section->main
+The button element is the target element.
+The target element then delgates the event to parent.
+
+Use Cases for event delegation:
+
+1. When we have an element with lots of child elements that we are interested in.
+
+2. When we want an event handler attached to an element that is not yet in the DOM when our page is loaded.
+
+
+Setting up the delete event listener using Event Delegation
+1. How to use event delegation in practice.
+2. How to use ID's in HTML to connect the UI with the data model.
+3. How to use the parentNode property for DOM traversing.
+
+To delete the item from the income/expense tab in the bottom div element we need to firs decide on the class that we need to define in the DOMString
+
+The class that is common to both income and expense div is container
+hence we define the value for the same in the domstring as below:
+
+container: '.container'
+
+We then select the element from the setupEventListener function in the controller function as follows:
+document.querySelector(DOM.container).addEventListener('click', ctrlDeleteItem);
+
+The function ctrlDeleteItem is defined in the controller object itself as follows:
+
+var ctrlDeleteItem  = function(event){
+        // Prints the target element that has been clickec
+        //console.log(event.target);
+        
+        // To delete we need to delete the div with class item
+        // Hence we traverse the DOM as shown below
+        var itemID, splitID, type;
+        
+        itemID = event.target.parentNode.parentNode.parentNode.parentNode.id;
+        if (itemID){
+            
+            // inc-1
+            splitID = itemID.split('-');
+            type = splitID[0];
+            ID = splitID[1];
+            
+            // 1. Delete the item from the DS
+            
+            // 2. Delete the item from the user interface
+            
+            // 3. Update and show the new Budget
+            
+        }
+        
+        console.log(splitID);
+    };
+Explanation:
+1. The function takes the parameter event
+2. console.log(event.target) -- will print the element in the DOM clicked
+3. We traverse the DOM tree from the button element using the parentNode and save the element of income-0 or expense-0
+4. So we split the string inc-0/exp-0 to get the id nd the type of action we are going to delete.
+
+Deleting an item from our budget controller:
+
+- Method of Array map()
+- How to remove element of the array using splice method.
+
+
+This is the part where we try to delete the data from the array after clicking the delete button in the container
+
+In the budgetController we create a new function deleteItem as below:
+
+deleteItem: function(type, id){
+            // id :3
+            // the below code will delete the value in the respective at index 3 and not the value having 3
+            // [1 2 4 6 8]
+            //data.allItems[type][id]
+            // differnece between map and forEach is that map returns a brnad new array for consumption
+            var ids, index;
+            ids = data.allItems[type].map(function(current){
+               return current.id; 
+            });
+            
+            index = ids.indexOf(id);
+            
+            // deleting item from index of the array
+            if (index !== -1){
+                // splice method of Arrays- used to remove elements
+                data.allItems[type].splice(index, 1);
+            }
+            
+        }
+Explanation:
+1. We pass 2 functional arguments type and id
+2. The map function is used to create a new array from the value given as input as follows:
+	ids = data.allItems[type].map(function(current){
+               return current.id; 
+            });
+			
+	Here, the new array is created as [1 2 4 6 8]
+	
+3. Retreive the index from the ids array as follows:
+	index = ids.indexOf(id) i.e 3
+4. Then we delete the element at index 3 from the array
+
+5. We then call the function from the controller as below:
+	budgetCtrl.deleteItem(type, ID);
+	
+Deleting an Item from the UI:
+-> how to remove element from the DOM
+
+In the UI controller we create a function named deleteListItem:
+deleteListItem: function(selectorID){
+            // In JS we can only remove a child
+            var el = document.getElementById(selectorID);
+            el.parentNode.removeChild(el);
+        }
+
+Explanation:
+
+1. The arguments passed is the inc-0 or exp-0 value of the selectorID
+2. We store the parent element in the variable e1
+3. Then we user the parentNode to remove the child inc-0 from the div
+
+
+We call the same in the controller as follows:
+UICtrl.deleteListItem(itemID)
+
+We then update the top div element with nw value of the budget after deleteion
+
+
+Plan 3 Architecture:
+=====================
+Updating the percentages: Controller
+
+Create a new function to updatePercentages:
+ var updatePercentages = function(){
+        
+        // 1. Calculate the percentages
+        
+        // 2. Read percentage from the budget controller
+        
+        // 3. Update the UI with new percentages.
+        
+    }
+
+Update percentages: Budget Controller
+
+How to make budget controller interact with Expense prorotype
+
+To calculate the individual expense percentage we create two prorotypes of Expense object as follows:
+
+Expense.prototype.calcPercentage = function(totalIncome) {
+        if (totalIncome > 0) {
+            this.percentage = Math.round((this.value / totalIncome) * 100);
+        } else {
+            this.percentage = -1;
+        }
+    };
+    
+    
+Expense.prototype.getPercentage = function() {
+        return this.percentage;
+    };
+
+Explanation:
+
+1. The calcPercentage is called from the public method of the budgetController with the value for totalIncome
+2. the getPercentage is called to return the percentage calculated by the calcPercentage
+
+Now, we add the calculatePercentages function which will calculate the precentage of each expense as follows:
+
+calculatePercentages: function() {
+            
+            /*
+            a=20
+            b=10
+            c=40
+            income = 100
+            a=20/100=20%
+            b=10/100=10%
+            c=40/100=40%
+            */
+            
+            data.allItems.exp.forEach(function(cur) {
+               cur.calcPercentage(data.totals.inc);
+            });
+        }
+
+Explanation:
+1. We create a forEach loop which will calculate the expense precentage for each input expense bu passing the data.total.inc value to the calcPercentage
+
+Next, we add a getPercentage function that will create a array of the percentages calculated as follows:
+
+getPercentages: function() {
+            var allPerc = data.allItems.exp.map(function(cur) {
+                return cur.getPercentage();
+            });
+            return allPerc;
+        }
+
+Explanation:
+1. We store the array in the varibale allPerc and then return the allPerc.
+
+
+Ultimately we call the above function from the controller class as follows:
+
+updatePercentages();
+
+
+And the definition of the updatePercentages is as follows:
+
+var updatePercentages = function(){
+        
+        // 1. Calculate the percentages
+        budgetCtrl.calculatePercentages();
+        // 2. Read percentage from the budget controller
+        var percentages = budgetCtrl.getPercentages();
+        // 3. Update the UI with new percentages.
+        console.log(percentages);
+    }
+
+Explanation:
+
+1. first call the calculatePercentages.
+2. store each percentage returned from the getPercentages in the percentages varibale.
+3. Display the same in console.
+
+
+Updating percentages: UI Controller
+
+-> How to create our own forEach function for nodeLists instead of Array?
+
+We now write a function to display the percentages in the UIcontroller.
+
+Add to the DOMString the following value:
+expensesPercLabel: '.item__precentage'
+
+We write a public method to display the value in the UI as follows:
+displayPercentages: function(percentages){
+            var fields;
+            // the below returns a list-> which is a node list
+            fields = document.querySelectorAll(DOMStrings.expensesPercLabel);
+            
+            var nodeListForEach = function(list, callback){
+              for (var i = 0; i< list.length; i++){
+                  callback(list[i], i);
+              }
+            };
+            
+            nodeListForEach(fields, function(current, index){
+                if (percentages[index] > 0){
+                    current.textContent = percentages[index] + '%';    
+                }else{
+                    current.textContent = '---';
+                }
+                
+            });
+        }
+Explanation:
+1. Store the value of the percentage from the expensesLabel in the fields variable which is a node list
+2. We then create a custome forEach method to traverse the nodeList as follows:
+	nodeListForEach(fields, function(current, index){
+		if (percentages[index] > 0){
+                    current.textContent = percentages[index] + '%';    
+                }else{
+                    current.textContent = '---';
+                }
+	});
+3. We create a new funtion inside the displayPercentages for passing the value of each element of the list to the callback function called from the nodeListForEach as follows:
+	var nodeListForEach = function(list, callback){
+		for (var i = 0; i<list.length;i++){
+			callback(list[i], i);==> this will call the callback function as per the list length
+		}
+	}
+Formatting budget numbers: String manipulation:
+
+-> Different string method to manipulate strings
+
+The budget numbers are not getting formatted correctly hence we declare a private funtion formatNumber as follows:
+
+var formatNumber= function(num, type){
+            /*
+                +/- before the number
+                exactly 2 decimal points
+                comma separating the thousands
+            */
+            num = Math.abs(num);
+            num = num.toFixed(2);// method of the number prototype.
+            
+            numSplit = num.split('.');
+            
+            int  = numSplit[0];
+            if (int.length>3){
+                int = int.substr(0, int.length-3)+','+int.substr(int.length-3,3);
+            }
+            dec = numSplit[1];
+            
+            return (type === 'exp' ? '-':'+') + ' ' +int+'.'+dec;
+    };
+Explanation:
+
+1. Convert the num passed to the above function to absolute
+2. Format the decimal places to 2 by using the toFixed()
+3. Now we split the integer and decimal part using the num.split('.') and save it in numSplit
+4. store the integer value in int as numSplit[0]
+5. store the decimal value in dec as numSplit[1]
+6. To place the comma in the integer part we use the substr function as below:
+	if (int.length>3){
+                int = int.substr(0, int.length-3)+','+int.substr(int.length-3,3);
+            }
+7. the function will return the fomatted number as below:
+	return (type === 'exp' ? '-':'+') + ' ' +int+'.'+dec;
+	the -ve sign is given to exp values and + to inc values
+
+8. We call the function as below for the following parts in the program:
+	addListItem
+	newHtml = newHtml.replace('%value%', formatNumber(obj.value, type));
+	
+	displayBudget
+	var type;
+    obj.budget > 0 ? type = 'inc':type = 'exp';
+	document.querySelector(DOMStrings.budgetLabel).textContent = formatNumber(obj.budget,type);
+    document.querySelector(DOMStrings.incomeLabel).textContent = formatNumber(obj.totalInc, 'inc');
+    document.querySelector(DOMStrings.expensesLabel).textContent = formatNumber(obj.totalExp, 'exp');
+
+Displaying current month and year:
+-> How to get the current date by using the Date object constructor
+
+displayMonth: function(){
+            var now, year, month, months ;
+            
+            now = new Date();
+            
+            year = now.getFullYear();
+            
+            
+            months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+            
+            month = now.getMonth();
+            
+            document.querySelector(DOMStrings.dateLabel).textContent = months[month]+' '+year;
+            
+        }
+call it in the init() function of the controller
+
+
+How and when to use change events:
+
+To change the color of the input fields while changing the type from inc to exp
+changedType : function(){
+            
+            var fields = document.querySelectorAll(
+                DOMStrings.inputType + ',' +
+                DOMStrings.inputDescription + ',' +
+                DOMStrings.inputValue);
+            
+            nodeListForEach(fields, function(cur) {
+               cur.classList.toggle('red-focus'); 
+            });
+            
+            document.querySelector(DOMStrings.inputBtn).classList.toggle('red');
+        }
+		
+========================================================================================================
+Next Generation JavaScript Module
+=========================================================================================================
+
+What's new in JavaScript ES6/ES2015?
+=======================================
+1. Variable Declarations with let and const
+--------------------------------------------------------
+const-> Used for constants. The values we don't want to change.
+let-> It's like the old var keyword. Mutable.
+
+Keyword let and const are blocked scoped and var keyword is function scoped.
+
+To find the differnce between var let and const we comment the console.log in the //ES5 and //ES6 section from IF and copy and paste the same outside if.
+
+The //ES5 will work because the the var keyword used to declare variables are function scoped and the scope will be available for the whole function.
+
+The //ES6 will give error because the let and const keyword are blocked scoped i.e the scope is limited betwenn the two {} braces only and not outside it.
+
+The const cannot be used by declartion outside the block and then initialization inside the block as it will throw error :
+Uncaught SyntaxError: Missing initializer in const declaration
+
+Hence, we need to decalrare and initialize the const variable outside of the block.
+
+When we access the console log of the firstName variable before declaration and initialization for the //ES5 the variables are hoisted and set to undefined.
+
+But for //ES6 the same above step gived error : Uncaught ReferenceError: Cannot access 'firstName' before initialization
+at driversLicense6
+
+2. Blocks and IIFE
+-----------------------------------------------------------------
+1. In ES6 we declare a variable inside a simple {} block as let and const the same will not be accessed outside the block
+2. To do the same above we use IIFE in ES5 with var variable and the same could not be accessed outside.
+
+3. Strings in ES6
+----------------------------------------------------------------------
+i. In ES5 we used to write to console by concat of + sign to attach two strings together.
+ii. In ES6 we write between `` with variable names and functions in ${} braces.
+
+New String methods.
+1. startsWith, endsWith, includes, repeat.
+
+4. Arrow Functions
+-----------------------------------------------------------------------
+ES5 syantx to write function expressions
+ages5 = years.map(function(el){
+   return 2020-el; 
+});
+
+ES6 synatx to write it in form of array functions:
+ages6_2 = years.map((el, index) => {
+   const now = new Date().getFullYear();
+    const age = now - el;
+    return `Age element ${index + 1}: ${age}.\n`;
+});
+
+Note: Arrow functions do not have 'this' keyword. Hence called as lexical this.
+
+Note: when we create a function in an object and try to access the variables of the object from the other functions the this keyword will refer to the window object instead of the class object.
+
+
+5. Destructuring
+--------------------------------
+Syntax for destruturing array is:
+const [name, age] = ['Prashant', 26];
+Syntax for destruturing object is:
+const obj = {
+    firstName : 'Prashant',
+    lastName: 'Bhat'
+}
+const {firstName, lastName} = obj;
+Using function return values to be destrutured:
+function calcRetirementAge(year, retirementAge){
+    const age = new Date().getFullYear()-year;
+    return [age, retirementAge-age];
+}
+const [age, ageOfRetirement] = calcRetirementAge(1994, 58);
+
+6. Arrays in ES6/ES2015
+---------------------------------
+ES5 Syntax to converting NodeList to Array
+Array.prototype.slice.call(boxes)=> boxes is the NodeList
+ES5 syntax for using continue and break keyword
+for(var i = 0 ; i<boxesArr5.length; i++){
+    if (boxesArr5[i].className === 'box blue'){
+        continue;
+    }
+    boxesArr5[i].textContent='I Changed To Blue !';
+}
+
+ES6 Syntax for converting NodeList to Array
+Array.from(boxes)
+boxesArr6.forEach(cur => cur.style.background = 'dodgerblue');
+ES6 Syntax for loops:
+for (const cur of boxesArr6){
+    if (cur.className.includes('blue')){
+        continue;
+    }
+    cur.textContent = 'I Changed To Blue !';
+}
+
+7. Spread Operator
+-------------------------
+The ES5 syntax to pass array to a function with 4 arguments are as follows:
+var sum2 = addFourAges.apply(null, ages);
+The ES6 Syntax:
+var sum3 = addFourAges(...ages);=> spread operator
+
+Use Case of Spread Operator on DOM elements:
+// Using spread Operator on NodeList
+const h = document.querySelector('h1');
+const boxes = document.querySelectorAll('.box');
+const all = [h,...boxes];
+Array.from(all).forEach(cur => cur.style.color = 'purple');
+
+8. Rest Parameters
+-------------------------------
+-> The syntax of the rest parameter is the same as that of the spread operator but the concept is different.
+-> Every function has an arguments keyword access and when we access the same we get an array like representation but infact the arguments is an object which stores the arguments passed to the function called.
+-> If we need to use it as an array we need to transform to array.
+In ES5 we need to transform the same into array as per below syntax:
+function isFullAge5(){
+    // convert the arguments keyword containing array like element
+    var argArr5 = Array.prototype.slice.call(arguments);
+    argArr5.forEach(function(cur){
+       //console.log(cur);
+       console.log((new Date().getFullYear()-cur)>=18); 
+    });
+}
+In ES6 we need not transfrom to array as it itself is transfromed to array:
+function isFullAge6(...years){
+    years.forEach(cur => console.log((new Date().getFullYear() - cur)>=18));
+}
+
+-> Now if we need to pass a age limit parameter to the both the ES5 and ES6 versionwe need to do some changes in ES5 and ES6 argument list.
+// ES5 syntax
+function isFullAge5(limit){
+    // convert the arguments keyword containing array like element
+    // but this time the limit will also be converted to array but we need to exclude the same
+    // and can be done as below
+    var argArr5 = Array.prototype.slice.call(arguments,1);
+    argArr5.forEach(function(cur){
+       //console.log(cur);
+       console.log((new Date().getFullYear()-cur)>=limit); 
+    });
+}
+isFullAge5(21,1994, 2005, 2006, 1989);
+
+//ES6
+function isFullAge6(limit,...years){
+    years.forEach(cur => console.log((new Date().getFullYear() - cur)>=limit));
+}
+isFullAge6(21,1994, 2005, 2006, 1989);
+
+9. Default Parameters
+-------------------------------
+The default parameters can be provided as per ES6 syntax as below:
+BhatPerson(firstName, yearOfBirth, lastName = 'Bhat', nationality = 'Indian')
+
+10. Maps
+----------------------------------
+-> New Key Value data structure
+
+=>Syntax for initialization of Maps:
+const question = new Map();
+
+=>Inserting key and value to the map function
+question.set(1, 'ES5');
+
+=> Getting Values form map
+question.get(4)
+
+=> Using of keyword to loop through key value pairs
+
+for ( [key, value] of question.entries()){
+    //console.log(`This is ${key} and it's val ${value}`)
+    if(typeof(key)==='number'){
+        console.log(`Answer ${key}:${value}`);
+    }
+}
+
+11. Classes
+----------------------
+The ES5 synatx of creating a class and adding memeber methods are:
+var Person5 = function(name, yearOfBirth, job){
+    this.name = name;
+    this.yearOfBirth = yearOfBirth;
+    this.job = job;
+}
+
+// Creating a member function calculateAge
+Person5.prototype.calculateAge = function(){
+    var age = new Date().getFullYear() - this.yearOfBirth;
+    console.log(age);
+}
+
+The ES6 syntax of creating a class and adding member methods are:
+class Person6{
+    // when we initalize the object the constructor is called with below args
+    constructor(name, yearOfBirth, job){
+        this.name = name;
+        this.yearOfBirth = yearOfBirth;
+        this.job = job;
+    }
+    
+    // Adding Member Function calculateAge
+    calculateAge(){
+        let age = new Date().getFullYear() - this.yearOfBirth;
+        return age;
+    }
+    
+    // Adding static function to the class- meaning they are class function
+    static greeting(){
+        console.log('Hi There !');
+    }
+}
+
+12. Classes with Subclasses
+-----------------------------------
+Check the comments in the code for explanation
+
+
+Programming Exercise Learning:
+function calc(arr){
+    const sum = arr.reduce((prev, cur, idx) => prev+cur, 0);
+    return [sum, sum/arr.length];
+}
+
+This will calculate the sum of each element of the array using the reduce function
+prev value : -0
+prev+cur :- callback function return value
+
+Asynchronous Javascript: Promises and Async/Await ans AJAX:
+==============================================================
+Lecture 1: Example of Aysynchronous JavaScript
+---------------------------------------------------------
+Lecture 2: Understanding asynchronous javascript : the event loop
+-----------------------------------------------------------------
+Concept of Asynchronous JavaScript is that the function will not wait for the same to execute before going ahead with other codes until the time for its execution has not come.
+
+1. Allows asynchronous function to run in the background
+2. We pass in the callbacks that run once the function has finished its work
+3. Move on immediately: Non-blocking!
+Note: 
+
+setTimeout, DOM events, XMLHttpRequest() are WebAPi's and leave outside of the JavaScript engine
+
+Event Loop
+--------------------------------------------------------------------------------------------------------------------------------------------
+Execution Stack							Web APIs 												Console
+																								Inside First Function!
+										setTimeout()											The End!
+										DOM Events												Inside the second Function (Async)!
+4. Execution							XMLHttpRequest()
+Context
+setTimeout()
+4=>pops									Create a callback function
+of the stack							with timer wait of 2s
+									
+3. Execution Context
+second()
+3=> pops of the stack after setTimeout()
+
+2. Execution Context
+log()
+2=>pops after
+printing to console
+
+5. Execution Context
+log()
+5=> pops after 
+printing to console.
+
+1. Execution Context
+first()
+1=> pops out
+------------------
+Global Execution  |
+Context			  |
+------------------
+
+
+						Event Loop		1. callback function
+										enters the message queue
+										after 2seconds
+										Message Queue
+Event loop is used tho execute callback function after the the global execution stack is finished.
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+Lecture 3: The Old Way asynchronous JS with Callbacks
+-------------------------------------------------------------
+// Step 1: Create a function getRecipe() containing the the asynchronous calls 
+        const getRecipe = () => {
+            
+            // Step 2: Create a setTimeout function to create recipeId array and display the same
+            setTimeout(()=>{
+                const recipeId  = [523, 883, 432, 974];
+                console.log(recipeId);
+                
+                // Step 3: Create a timeout function to print the id and recipeId after every 1.5 secs
+                setTimeout((id) =>{
+                    const recipe = {
+                        title: 'Fresh Dosa',
+                        publisher: 'Prashant'
+                    };
+                    console.log(`${id}: ${recipe.title}`);
+                    
+                    /*
+                        Output:
+                            432: Fresh Dosa
+                            Explanation: 
+                            The setTimeout can pass an extra argument which will pass the recipeId
+                    */
+                    
+                    // Step 4: Create a new timeout function to print the publisher
+                    setTimeout((publisher)=>{
+                        const recipe2 = {
+                            title: 'Fresh Idli',
+                            publisher: 'Swapnil'
+                        };
+                        console.log(recipe);
+                    }, 1500,  /*argument for the callback function*/recipe.publisher);
+                    /*
+                        Output:
+                        {title: "Fresh Dosa", publisher: "Prashant"}
+                        Explanation: 
+                        The setTimeout will pass an extra argument of recipe.publisher to print the recipe2 object
+                    */
+                }, 1500, /*argument for the callback function*/recipeId[2]);
+                
+                
+            },1500);
+            // ouptut:
+            /*
+            After first setTimeout:
+            [523, 883, 432, 974] array is printed after 1.5 secs
+            
+            After second setTimeout:
+            [523, 883, 432, 974]
+            432: Fresh Dosa
+            Explanation:
+            The wrapper setTimeout waits for 1.5s and then prints the array.
+            The setTimeout inside again waits for 1.5 secs to print the object.title alongwith the id.
+            
+            After the third setTimeout:
+            [523, 883, 432, 974]
+            432: Fresh Dosa
+            {title: "Fresh Dosa", publisher: "Prashant"}
+            */
+            
+        }
+        getRecipe();
+Disadvantage:
+
+To many callbacks.
+
+Lecture 4: Promises
+------------------------------
+What is promise?
+1. Object that keeps track of whether a certain (async) event has happened already  or not.
+2. Determines what happens after a certain event has happened.
+3. Implements the concept of future value that we'are expecting.
+
+Promise States:
+1. Pending: Before the (async) event has happened.
+2. Settled/Resolved: After the event happens.
+3. Fulfilled: - Result is available then promise is fullfilled, Rejected: Result is not available(error) then promise not fullfilled.
+
+// Step 1: Create a function to get the recipeid array.
+        const getIDs = new Promise((resolved, rejected)=>{
+            // return a setTimeout function which will resolve the array
+            return setTimeout(()=>{
+                // resolved will return the array
+                resolved([523, 883, 432, 974])
+            }, 1500)
+        })
+        
+        // Step 2: Create a function to return the recipe id and the title.
+        const getRecipe = (recID) => {
+            return new Promise((resolved, rejected)=>{
+                return setTimeout((ID)=>{
+                    const recipe = {
+                        title: 'Fresh Dosa',
+                        publisher: 'Prashant Bhat'
+                    }
+                    resolved(`${ID}: ${recipe.title}`)
+                }, 1500, recID)
+            })
+        }
+        
+        // Step 3: Create a function to return the recipe publisher
+        const getRelated = publisher => {
+            return new Promise((resolved, rejected)=>{
+                return setTimeout((pub)=>{
+                    const recipe = {
+                        title: 'Fresh Idli',
+                        publisher: 'Swapnil Mishra'
+                    }
+                    resolved(`${pub}: ${recipe.title}`);
+                },1500, publisher)
+            })
+        }
+        
+        // The getIDs is the Promise and then we print to the console as below
+        getIDs
+        .then(IDs => {
+            console.log(IDs)
+            // returns a new Promise instance that resolves the id and the title of the recipe
+            return getRecipe(IDs[2]);
+        })
+        .then(recipe => {
+            console.log(recipe);
+            // returns a new Promise instance that resolves the publisher and the title of the recipe
+            return getRelated('Swapnil Mishra')
+        })
+        .then(recipe =>{
+            console.log(recipe)
+        })
+        .catch(error => {
+            console.log(error);
+        })
+        
+        // Output:
+        /*
+            After 1st promise call
+            [523, 883, 432, 974]
+            Explanation:
+            The getIDs is a object of the Promise which takes in the argument
+            (resolved, rejected).
+            The constructor returns the setTimeout which will resolve the array in 1.5sec
+            We then call the getID with the then method with arguments IDs an then print the resovled array
+            If we call the rejected in the setTimeout the catch will be called
+            
+            After 2nd promise call
+            432: Fresh Dosa
+            Explanation:
+            The getRecipe method takes the argument recID and returns the new Promise method.
+            The promise method will then return the setTimeout in 1.5 sec the recipe object.
+            
+            After the third promise call
+            Swapnil Mishra: Fresh Idli
+            Explanation:
+            The getRelated method takes the argument publisher name and returns the new Promise method.
+            The promise method will then return the setTimeout in 1.5 sec the recipe object
+        */
+Lecture 5: From Promises to Async/Await
+-----------------------------------------------
+1. Async/Await was designed to consume promises and not to produce them.
+2. The async function when returns the value it returns Promise<Pending> because the promise is still not executed.
+// Lecture 5: Async/Await
+        // Step 1: Create a function to get the recipeid array.
+        const getIDs = new Promise((resolved, rejected)=>{
+            // return a setTimeout function which will resolve the array
+            return setTimeout(()=>{
+                // resolved will return the array
+                resolved([523, 883, 432, 974])
+            }, 1500)
+        })
+        
+        // Step 2: Create a function to return the recipe id and the title.
+        const getRecipe = (recID) => {
+            return new Promise((resolved, rejected)=>{
+                return setTimeout((ID)=>{
+                    const recipe = {
+                        title: 'Fresh Dosa',
+                        publisher: 'Prashant Bhat'
+                    }
+                    resolved(`${ID}: ${recipe.title}`)
+                }, 1500, recID)
+            })
+        }
+        
+        // Step 3: Create a function to return the recipe publisher
+        const getRelated = publisher => {
+            return new Promise((resolved, rejected)=>{
+                return setTimeout((pub)=>{
+                    const recipe = {
+                        title: 'Fresh Idli',
+                        publisher: 'Swapnil Mishra'
+                    }
+                    resolved(`${pub}: ${recipe.title}`);
+                },1500, publisher)
+            })
+        }
+        
+        // The below code helps us to understand the syntax for async await
+        // Step 1: Create an async function
+        async function getRecipesAW(){
+            // Store the promise of getIDs as below
+            const IDs = await getIDs;
+            console.log(IDs);
+            // Explanation: The await keyword helps JS to know it is a promise and needs to be excuted after the promise is resolved
+            // Store the promise of getRecipe as below
+            const recipe = await getRecipe(IDs[2]);
+            console.log(recipe);
+            // Explanation: The await keyword helps JS to know it is a promise and needs to executed after the promis is resolved
+            // Store the promise of getRelated as below
+            const related = await getRelated('Swapnil Mishra');
+            console.log(related);
+            // Explanation: The await keyword helps JS to know it is a promise and needs to executed after the promis is resolved
+        
+            // Consider the async function returns a value
+            return recipe;
+            
+        }
+        // Calling the aync function
+        // example of the recipe value being returned.
+        getRecipesAW().then(result=> console.log(`${result} is the best.`));
+		
+Lecture 6: AJAX and APIs
+-------------------------------------
+What are AJAX and APIs ?
+
+AJAX- Asynchronous Javascript and XML
+1. It helps to asynchronously communicate with servers.
+
+Remote Server(API)
+
+
+HTTP REQUEST 		HTTP RESPONSE
+(GET/POST)
+JavaScript App
+running on client server.
+
+fetchWebAPIs
+
+APIS- part of the server.
+1. Application Programming Interface
+It can be used to communicate with one piece of software with another piece of software.
+
+Your own APIS or 3rd party APIs(Google Maps, Embed Youtube videos).
+
+Lecture 7: Making AJAX calls with Fetch and Promises
+-----------------------------------------------------------
+Example:
+// Step 1: use the function fetch to fetch the API url of metaweather which means we sent REQUEST to metawether
+        // Step 2: The fetch function returns Promise, hence we cna consume the same using then and catch clause
+        function getWeather(woeid){
+            fetch(  `https://www.metaweather.com/api/location/${woeid}/`)
+        .then(result => {
+            console.log(result);
+            /*
+            Output:
+            A readble stream body of response from the metweather api
+            */
+            // Step 3: return the result.json (promise by converting to json)
+            return result.json();
+        })
+        .then(data => {
+            console.log(data);
+            
+            // Step 4: Retrieve the data from the json object for the today's date.
+            const today = data.consolidated_weather[0];
+            console.log(`Temperature in ${data.title} stay between ${today.min_temp} and ${today.max_temp}`);
+            // Output:
+            /*
+            The body of the response in json format.
+            */
+        })
+        .catch(error =>{
+            console.log(error);
+        });
+        }
+        getWeather(2487956);
+        getWeather(44418);
+		
+Lecture 8:  Making AJAX calls with Fetch and Async/Await
+----------------------------------------------------------------
+Example:
+
+async function getWeatherAW(woeid){
+        try{
+            const result = await fetch(  `https://www.metaweather.com/api/location/${woeid}/`);
+            
+            const data = await result.json();
+            
+            //console.log(data);
+            
+            const tomorrow = data.consolidated_weather[1];
+            console.log(`Temperatures tomorrow in ${data.title} stay between ${tomorrow.min_temp} and ${tomorrow.max_temp}.`);
+            return data;
+        }catch(error){
+            alert(error);
+        }
+        }
+        getWeatherAW(2487956);
+        // To work with return in aync function
+        let dataLondon;
+        getWeatherAW(44418).then(data => {
+            dataLondon = data
+            //console.log(dataLondon);
+        });
+
+Modern JavaScript: Using ES6, NPM, Babel, WebPack
+=======================================================================
+Lecture 2: Project 2 Overview(Forkify)
+--------------------------------------------
+Lecture 3: An Overview of Modern JavaScript
+--------------------------------------------
+1. 3rd party packages- node, npm
+2. npm - command line interface for installing tools on node js
+3. Babel- convert ES6/ES7 to Es5.
+4. ES6 modules - must be budled together using webpack.
+
+Putting it all together with an automated development setup powered by npm scripts
+
+Lecture 4: A brief introduction to command line
+-------------------------------------------------
+Lecture 5: A Modern setup: Installing node js and npm
+-----------------------------------------------------
+
+npm init asks question regarding the package.json
+package name: starter
+version: 1.0.0
+description: 
+
+Installing webpack using npm
+(development tool)npm install webpack --save-dev(development dependency) creates devDependencies-- also the devDepency will work only for this project
+
+Installing jquery using npm
+(development tool)npm install jquery --save(created as dependency)
+
+
+Advantage of package.json
+1. When we share our project we don't need to change the node_modules folder
+2. If we delete the node_modules folder then the package json has the information of the dependency to be installed.
+3. Hence, we use npm install and this will read the package.json file and install the required dependency.
+
+
+Uninstall the packages-
+npm uninstall jquery --save
+
+
+For global installation of development tool:
+Install live server globally
+npm install live-server --global
+================================================================================================================================================================================================================================
+Note : Tooloing changes
+Modern tools like Webpack and Babel change all the time, which is great for the development community, but difficult for course creators.
+
+So please understand that I cannot re-record these videos each time a new change is introduced to one of the tools. Instead, I will keep this lecture updated with instructions to make your tooling setup work as it should.
+
+There are two ways of approaching this: you either just want tools to work like in the videos, or you want to use the latest versions of the tools. Choose the one that works best 😉
+
+
+
+1. If you just want it to work, follow this (RECOMMENDED) 👇
+
+Tools don't add that much functionality in new versions, so you're just fine using this method.
+
+You will have to install the same package versions that I install in my videos. So instead of the npm install commands I use in the videos, use the following (we use @ to specify the version number)
+
+For webpack:
+
+npm install --save-dev webpack@4 webpack-cli@2 webpack-dev-server@3
+For babel:
+
+npm install --save-dev babel-core@7 babel-preset-env@1 babel-loader@7
+npm install --save babel-polyfill@6
+
+
+2. If you want the latest versions, follow this 👇
+
+This method requires a little more work, as babel has recently changed how the configuration works.
+
+For webpack, just follow the videos.
+
+For babel, instead of installing babel-core, babel-preset-env and babel-polyfill in the babel lecture, please install @babel/core, @babel/preset-env, core-js@3, and regenerator-runtime like this:
+
+
+
+npm install --save-dev @babel/core @babel/preset-env babel-loader npm install --save core-js@3 regenerator-runtime
+
+
+
+You will also need to change the entry in webpack.config.js (a file we create during the video) from this:
+
+
+==================================================================================================================================================================================================================================
+Lecture 7: A modern setup : Configuring Webpack
+------------------------------------------------------
+Webpack
+-------
+Modules with dependencies --> webpack --> Converts it to single file of a type.
+
+We create a webpack.config.js inside the root folder of the project
+It contains only one object to be exported
+
+The Webpack consists of 4 core concepts:
+--------------------------------------------
+1. entry: Specifies the entry property and provides the starting point.
+2. output: defines the ouptut object which contains the path --> absolute path and the folder name of javascript and contains the output file: bundle.js
+3. mode: development.
+4. plugins
+
+Note Installation in Lectures:
+
+npm install webpack-cli --save-dev
+
+To compile and run javscript with webpack use the below command:
+npm run dev
+
+To compile with production:
+npm run build
+
+Steps to Compile the JS codes with webpack:
+-------------------------------------------------
+Step 1: First configure the file webpack.config.js
+// Declare the path -- which will be absolute path for the same
+const path = require('path')
+
+// The webpack will export a single object as follows:
+module.exports = {
+	// Give the entry point for the project
+	entry: './src/js/index.js', 
+	// We then declare the ouptut object
+	ouptut:{
+		path: path.resolve(__dirname, 'dist/js'),// we provide the path property as path.resolve(base directory, 'dist/js'--> folder for saving the file)
+		filename: 'bundle.js'// the file name of output
+	},
+	// Give the mode in which the project has to be executed
+	mode: "development"
+}
+
+Step 2: install the required devDependencies of webpack-cli and add the same in package.json
+npm install webpack-cli --save-dev
+
+Step 3: Create a dummy test.js in the src directory containing the following
+console.log("Imported module");
+export default 23;
+
+Step 4: We then import the default number from test.js in index.js
+import number from './test';
+console.log(`I imported ${number} from another module.`);
+
+Step 5: We can remove the mode from the webpack.config.js and add the same in package.json
+"scripts":{
+	"dev": "webpack --mode development",
+	"build": "webpack --mode production"
+}
+
+For dev running we do:
+npm run dev
+
+For production we do:
+npm run build
+
+Lecture 8: A modern setup : The Webpack Dev Server
+-----------------------------------------------------------
+Install the webpack-dev-server
+npm install webpack-dev-server --save-dev
+
+Using the webpack-dev-server
+Step 1: Add to the webpack.config.js the following:
+devServer:{
+	contentBase:'./dist'
+}
+
+Step 2: Add new npm script in package.json
+"start": "webpack-dev-server --mode development --open"
+
+Note: To automatically refresh the server we do the following
+1. change the webpack.config.js code of output
+path : path.resolve(__dirname, 'dist'),
+filname: '/js/bundle.js'
+
+Plugins:
+Allows us to do complex processing of input files.
+
+Install html-webpack-plugin
+
+npm install html-webpack-plugin --save-dev
+
+The HtmlWebpackPlugin simplifies the creation of HTML file to serve your webpack bundles.
+Step 1 :
+We add the plugin as below in the webpack.plugin.js file:
+
+// Import the plugin to JS
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+Step 2:
+// use the plugin in the module.exports as below:
+plugins: [
+	new HtmlWebpackPlugin({
+		filename: 'index.html',// file to be created in the dist folder
+		tempelate: './src/index.html'// this is the inital template that should be used to display the file from the server on request.
+		
+	})// the argument passed is the object
+]
+Note:
+when we use the npm run start it does not write the index.html to the dist folder but just work on displaying the page
+when we use the npm run dev it creates the index.html file in the dist folder.
+
+
+Lecture 9: A modern setup : Babel
+------------------------------------------
+Intallation of some packages
+npm install babel-core babel-preset-env babel-loader --save-dev
+npm install @babel/core @babel/preset-env babel-loader --save-dev
+
+Loaders in webpack allows us to load or import all different types of files and also process them.
+
+Step 1: configure loaders in webpack.config.js
+The configuration of webpack adds the module part as follows:
+
+module:{
+        // we set some rules for loaders as objects
+        rules: [
+            {
+                // test property
+                test: /\.js$/,// check for all files and check if they end with js
+                // exclude the whole folder of node modules
+                exclude: '/node_modules/',
+                // All javascript object will use the babel loader
+                use: {
+                    loader: 'babel-loader'
+                }
+            }
+        ]
+}
+
+Step 2: babel config file
+{
+    "presets": [
+        ["@babel/env", {
+            "useBuiltIns": "usage",
+            "corejs": "3",
+            "targets": {
+                "browsers": [
+                    "last 5 versions",
+                    "ie >= 8"
+                ]
+            }
+        }]
+    ]
+}
+
+Step 3: Polyfill -- to convert the the ES6 objects to the one which were note present in the ES5
+
+Install Polyfill
+npm install babel-polyfill --save
+
+Add the configuration to the webpack.config.js
+if new polyfill not required
+
+Removed Code: 
+//"babel-preset-env": "^1.7.0",
+//"babel-core": "^6.26.3",
+
+Lecture 10 : Planning Project Architecture with MVC
+------------------------------------------------------------
+Model: App Logic and Data
+search.js
+recipe.js
+list.js
+Likes.js
+
+Controller
+index.js
+
+
+View: Can displace data from view to model
+searchView.js
+recipeView.js
+listView.js
+likesView.js
+
+controller works as intermediary between model and views
+
+
+Lecture 11: How ES6 Module Works
+------------------------------------------------
+1. How to use ES6 modules.
+2. Default and named exports and imports
+
+
+Changes in the project API
+--------------------------------------
+Response 
+
+Search.js
+=============
+const res = await axios(`https://forkify-api.herokuapp.com/api/search?&q=${this.query}`);
+
+Recipe.js
+=============
+const res = await axios(`https://forkify-api.herokuapp.com/api/get?rId=${this.id}`);
+
+Lecture 12: Making our First API Calls
+---------------------------------------------
+1. How to use the real world API
+2. What API keys are here and why we need them.
+
+Step 1: Create a getReults function in the controller index.js
+1. The function takes in queries 
+2. Uses the fetch function to fetch the data from the API
+3. But fetch will not be accepted by old hnec we use Axios
+Install axios
+npm install axios --save
+4. now import the axios in index.js
+import axios from 'axios'
+
+async function getResults(query){
+	try{
+		const res = await axios(`https://forkify-api.herokuapp.com/api/search?&q=${query}`);
+		const recipe = res.data.recipes;
+		console.log(recipe);
+	}catch(error){
+		alert(error)
+	}
+}
+getReults('pizza')
+
+
+Lecture 13: Building the search model
+----------------------------------------------------
+Write the code in the Search.js
+We create a class Search which will contain the above function getResults as follows:
+import axios from 'axios'
+export default class Search{
+    constructor(query){
+        this.query = query;
+    }
+    async getResults(){
+        try{
+            const res = await axios(`https://forkify-api.herokuapp.com/api/search?&q=${this.query}`);
+            this.results = res.data.recipes;
+            console.log(this.results);
+        }catch(error){
+            
+        }
+    }
+}
+
+We then use the below code in the index.js which is the controller:
+import Search from './models/Search'
+
+// Instantiat the Search class as below
+const search = new Search('pizza')
+console.log(search)
+
+/*
+Output:
+
+Search({query: 'Pizza'})
+*/
+
+// Now we call the getResults function from the model in the controller
+search.getResults();
+
+Lecture 14: Learning Search controller
+-----------------------------------------------
+Popular state managemnet library redux
+Now we do some change in the controller to search the result bu lciking on the search button of html
+The code for the same is below:
+const controlSearch = async () =>{
+    // 1. Get Query from the view
+    const query = 'pizza'
+    
+    if (query){
+        // 2. Search the object and add it to the state.
+        state.search = new Search(query);
+        
+        // 3. Prepare UI for results
+        
+        // 4. search for recipes
+        await state.search.getResults();
+        
+        // 5. Render the results on UI
+        console.log(state.search.results);
+    }
+}
+document.querySelector('.search').addEventListener('submit', e=>{
+ e.preventDefault();
+ controlSearch();
+});
+
+Lecture 15: Building the search view: Part 1
+-------------------------------------------------------------
+1. Advanced DOM Manipulation techniques
+2. How to use ES6 tempelate strings to render entire HTML components
+3. How to create a loading spinner
+
+Step 1: Seperate the DOM strings in base.js
+===================================================
+export const elements = {
+    // DOM element to get the value from the search field
+    searchInput: document.querySelector('.search__field'),
+    // DOM element to get the result on clicking the search button of the form
+    searchForm: document.querySelector('.search'),
+    // DOM element to add the result to the respective div tag.
+    searchResList:document.querySelector('.results__list')
+};
+Note : import {elements} from './base'
+Step 2: Add a method in the SearchView to getInput from the text box
+========================================================================
+// The function to get the input from the Input box of the DOM
+export const getInput = () => elements.searchInput.value;
+
+Step 3: Call the method in the controller index.js
+====================================================
+const query = searchView.getInput();
+
+Step 4: Add a method to renderResults using forEach
+=========================================================
+export const renderResults = (recipes) =>{
+    recipes.forEach(renderRecipe);
+}
+Step 4.1: Add a private method that will be used to insert the markup for the search result.
+======================================================================================================
+const renderRecipe = recipe => {
+    const markup = `
+                <li>
+                    <a class="results__link results__link--active" href="#${recipe.recipeId}">
+                        <figure class="results__fig">
+                            <img src="${recipe.image_url}" alt="${recipe.title}">
+                        </figure>
+                        <div class="results__data">
+                            <h4 class="results__name">${recipe.title}</h4>
+                            <p class="results__author">${recipe.publisher}</p>
+                        </div>
+                    </a>
+                </li>
+    `;
+    
+    elements.searchResList.insertAdjacentHTML('beforeend', markup);
+    
+}
+Step 5: Add a method to clear the input field after every search
+========================================================================
+// Function to clear the input text box
+export const clearInput = () =>{
+    elements.searchInput.value = '';
+}
+Step 6: Add a method to clear results field after every search
+==========================================================================
+// Function to clear the markup after
+export const clearResults = () => {
+    elements.searchResList.innerHTML = '';
+}
+
+Lecture 16: Building Search View Part2
+---------------------------------------------
+We build a limitRecipeTitle in the searchView
+
+Codes for the same:
+/*
+Example of working of below reducer function
+// 'Pasta with tomato and spinach'
+acc: 0 / acc + cur.length = 5 / newTitle = ['Pasta']
+acc: 5 / acc + cur.length = 9 / newTitle = ['Pasta', 'with']
+acc: 9 / acc + cur.length = 15 / newTitle = ['Pasta', 'with', 'tomato']
+acc: 15 / acc + cur.length = 18 / newTitle = ['Pasta', 'with', 'tomato']
+acc: 18 / acc + cur.length = 24 / newTitle = ['Pasta', 'with', 'tomato']
+*/
+
+// Create a private function to limit the lengt of title to 17 characters
+const limitRecipeTitle = (title, limit = 17) => {
+    const newTitle = [];
+    if (title.length > limit) {
+        title.split(' ').reduce((acc, cur) => {
+            if (acc + cur.length <= limit) {
+                newTitle.push(cur);
+            }
+            return acc + cur.length;
+        }, 0);
+
+        // return the result
+        return `${newTitle.join(' ')} ...`;
+    }
+    return title;
+}
+
+/*
+Another method is using substring
+*/
+/*
+const limitRecipeTitle1 = (title, limit= 17)=>{
+    if(title.length > limit){
+        title = title.substring(0, limit);
+        return `${title.substring(0, title.lastIndexOf(' '))}...`;
+    }
+    return title;
+}*/
+
+call the same when title is displayed.
+
+Lecture 17: Rendering and AJAX Loading Spinner
+-----------------------------------------------------
+Include the code in the base.js
+Note: 
+// DOM element to add loader spinner
+searchRes: document.querySelector('.results')
+export const elementsStrings = {
+    loader: 'loader'
+}
+// Create a function renderLoader which takes in argument of parent
+// deciding which parent element requires it.
+export const renderLoader = parent =>{
+    const loader = `
+        <div class = "${elementsStrings.loader}">
+            <svg>
+                <use href = "img/icons.svg#icon-cw"></use>
+            </svg>    
+        </div>
+    `;
+    parent.insertAdjacentHTML('afterbegin', loader);
+}
+
+// clear the loader svg
+export const clearLoader = () =>{
+    const loader = document.querySelector(`.${elementsStrings.loader}`);
+    if (loader){
+        // move upto parent and then remove the loader
+        loader.parentElement.removeChild(loader);
+    }
+}
+
+Call the function in 
+// Render the loader spinner
+renderLoader(elements.searchRes);
+clearLoader();// After the search result appears
+Removed script from SearchView.js
+results__link--active
+
+Lecture 18: Implementing Search Results Pagination
+----------------------------------------------------------------
+1. How to use the .closest method for easier event handling
+2. How and why to use data-*attributes in HTML5
+
+Step 1: Change the renderResult function:
+1. Change the argument list of renderResult
+2. Declare the start and end varibale to count the starting page no and ending page no of each pagination 
+// Function which contains the logic to divde the results into number of pages
+export const renderResults = (recipes, page = 1, resPerPage = 10) => {
+    // render results of currente page
+    const start = (page - 1) * resPerPage;
+    const end = page * resPerPage;
+
+    recipes.slice(start, end).forEach(renderRecipe);
+
+    // render pagination buttons by calling the renderButtons
+    renderButtons(page, recipes.length, resPerPage);
+};
+
+Step 2: Create render buttons for pagination:
+// Function to Render Pagination Buttons
+// We call a create button above to display the button markup
+const renderButtons = (page, numResults, resPerPage) => {
+    /*
+        Divide the pages into number of pages as follows:
+        1. numResults = 30 and resPerPage =10 then pages = 3
+        2. numResults = 45 and resPerPage =10 then pages = 4.5~5
+    */
+    const pages = Math.ceil(numResults / resPerPage);
+
+    let button;
+    // If we have first page and they are more than one pages for the search
+    if (page === 1 && pages > 1) {
+        // Only button to go to next page
+        button = createButton(page, 'next');
+    } 
+    // If we are in the next page and there are more pages
+    else if (page < pages) {
+        // Both buttons
+        button = `
+            ${createButton(page, 'prev')}
+            ${createButton(page, 'next')}
+        `;
+    } 
+    // If it is the last page
+    else if (page === pages && pages > 1) {
+        // Only button to go to prev page
+        button = createButton(page, 'prev');
+    }
+    // Insert the element into the DOM element
+    elements.searchResPages.insertAdjacentHTML('afterbegin', button);
+};
+
+Step 2.1: Create a private button
+const createButton = (page, type) => `
+    <button class="btn-inline results__btn--${type}" data-goto=${type === 'prev' ? page - 1 : page + 1}>
+        <span>Page ${type === 'prev' ? page - 1 : page + 1}</span>
+        <svg class="search__icon">
+            <use href="img/icons.svg#icon-triangle-${type === 'prev' ? 'left' : 'right'}"></use>
+        </svg>
+    </button>
+`;
+
+Step 3: Display the pages in result_pages using event handlers
+1. Event delegation
+2. Element.closest() - returns the closest ancestor of the current element (or the current element itself) which matches the selectors
+given a parameter. If no ancestors found it returns null.
+
+elements.searchForm.addEventListener('submit', e=>{
+ e.preventDefault();
+ controlSearch();
+});
+
+// Add event listener for the pagination buttons
+elements.searchResPages.addEventListener('click', e=>{
+    const btn = e.target.closest('.btn-inline')
+    //console.log(e.target);
+    //console.log(btn);//o/p: <button class="btn-inline results__btn--next" data-goto="3"></button>
+    
+    if(btn){
+        // The below script tries to extract the data from data-goto using btn.dataset.goto
+        const goToPage = parseInt(btn.dataset.goto,10);
+        searchView.clearResults();// clear the old page results and the pagination button
+        searchView.renderResults(state.search.results, goToPage);
+        //console.log(goToPage);
+    }
+});
+
+Lecture 19: Building the Recipe Model Part1
+------------------------------------------------------------------------
+
+Step 1: Create a Recipe Model Class in the models folder
+export default class Recipe{
+    constructor(id){
+        this.id = id;
+    }
+    async getRecipe(){
+        try{
+            const res = await axios(`https://forkify-api.herokuapp.com/api/get?rId=${this.id}`);
+            //console.log(res);
+            // Collect the data from the API
+            this.title = res.data.recipe.title;
+            this.publisher = res.data.recipe.publisher;
+            this.img = res.data.recipe.image_url;
+            this.url = res.data.recipe.source_url;
+            this.ingredients = res.data.recipe.ingredients;
+        }catch(error){
+            console.log(error);
+        }
+    }
+    
+    // Function to calculate the time taken to cook the recipe
+    calcTime(){
+        // Assume that we need 15 mins each for 3 ingredients 
+        const  numIng = this.ingredients.length;
+        const periods = Math.ceil(numIng/3);// numIng / 3
+        this.time = periods * 15;
+    }
+    
+    // Function to calculate the Servings
+    calcServings(){
+        // Assume 4 servings
+        this.servings = 4;
+    }
+}
+
+Step 2: Create a recipe controller in the index.js
+const r = new Recipe(47746);
+r.getRecipe();
+console.log(r);
+
+Lecture 20: Building the recipe controller
+----------------------------------------------------
+1. How to read the data from the page URL?
+2. How to respond to the hashchange event?
+3. How to add the same event listener to multiple events?
+
+Step 1: The controller should now use state to capture the recipe for a particular recipeId
+const controlRecipe = async() =>{
+    // window.location.hash is used to extract the hash value from the url
+    //const id = window.location.hash;
+    // Get the ID from the URL
+    const id = window.location.hash.replace('#','');
+    console.log(id);
+    if (id){
+        // 1. Prepare the UI for changes
+        
+        // 2. Create new recipe object
+        state.recipe  = new Recipe(id);
+        try{
+            // 3. Get recipe data using await
+            await state.recipe.getRecipe();
+            // 4. Calc Timings and Servings
+            state.recipe.calcTime();
+            state.recipe.calcServings();
+            // 5. Render the recipe
+            console.log(state.recipe);
+        }catch(error){
+            console.log("Error Processing Recipe!");
+        }
+        
+    }
+}
+
+Step 2: Handle the change
+// Hashchange event in javascript
+//window.addEventListener('hashchange', controlRecipe);
+
+// We need to add event listener to avoid the circumstance where we need to keep the value of hastag of the last page clicked
+//window.addEventListener('load', controlRecipe);
+
+// Example of adding the same event listener to multiple events
+['hashcode', 'load'].forEach(event => window.addEventListener(event, controlRecipe));
+
+Lecture 21: Building the recipe model Part2
+--------------------------------------------------
+1. Using array method like map(), slice(), findIndex() and includes.
+2. How and why to use eval?
+We have to extract the ingredients from recipe data
+Step 1: Pre-processing the string of ingredients:
+
+// The Text of ingredients are fo varying texts, hence we need to make it uniform
+    // Create a function to parse the ingredients
+    parseIngredients(){
+        // Create 2 arrays 
+        const unitsLong = ['tablespoons', 'tablespoon', 'ounces', 'ounce', 'teaspoons', 'teaspoon', 'cups', 'pounds'];
+        const unitsShort = ['tbsp', 'tbsp', 'oz', 'oz', 'tsp', 'tsp', 'cup', 'pound'];
+        const resolveCount = (array) => {
+            return array.length === 1 ? eval(array[0].replace('-', '+')) : eval(array.join('+'));
+        };
+        // Create a new array for ingredients
+        const newIngredients = this.ingredients.map(el=>{
+            // 1. Uniform Units 
+            
+            // Convert the ingredient to lowercase
+            let ingredient = el.toLowerCase();
+            
+            // Loop through each word from unitsLong in the ingredient and replace the same with word in the unitsShort
+            unitsLong.forEach((unit, i) => {
+                ingredient = ingredient.replace(unit, unitsShort[i]);
+            });
+            
+            // 2. Remove Parenthesis
+            ingredient = ingredient.replace(/ *\([^)]*\) */g, ' ');
+            //ingredient = ingredient.replace(/[\])}[{(] */g, ' ');
+            
+            // 3. Parse Ingredients into count, unit and ingredient
+            // remove the spaces from the word
+            const arrIng = ingredient.split(' ');
+            //Exceptional Case New code starts here…
+            /*arrIng.forEach((word, i) => {
+                unitsShort.forEach((unit) => {
+                    if (word.startsWith(unit) && word.length === unit.length + 1) {
+                        arrIng[i] = unit;
+                    }
+                });
+            });*/
+            // Find the unit Index
+            const unitIndex = arrIng.findIndex(el2 => unitsShort.includes(el2));
+            
+            let objIng; 
+            
+            if (unitIndex > -1) {
+                // There is a unit
+                // Ex. 4 1/2 cups, arrCount is [4, 1/2] --> eval("4+1/2") --> 4.5
+                // Ex. 4 cups, arrCount is [4]
+                
+                const arrCount = arrIng.slice(0, unitIndex);// Ex: 4 1/2 cups, arrCount[4, 1/2]
+                
+                let count;
+                
+                //eval function is used to do maths in place viz: eval("4+1/2") => 4.5
+                if (arrCount.length === 1){//Ex. 4 cups, arrCount is [4]
+                    count = eval(arrIng[0].replace('-', '+'));// For 1-1/2 hence replace it as 1+1/2 and call eval
+                } else {
+                    count = eval(arrIng.slice(0, unitIndex).join('+'));
+                }
+
+                objIng = {
+                    count,
+                    unit: arrIng[unitIndex],
+                    ingredient: arrIng.slice(unitIndex + 1).join(' ')
+                };
+
+            } else if (parseInt(arrIng[0], 10)) {
+                // There is NO unit, but 1st element is number
+                objIng = {
+                    count: parseInt(arrIng[0], 10),
+                    unit: '',
+                    ingredient: arrIng.slice(1).join(' ')
+                }
+            } 
+            /* Exceptional Case else if (parseInt(arrIng[0].charAt(0), 10)) {
+                // There is NO unit, but the first element is a number
+                const arrCount = [arrIng[0]];
+                if (parseInt(arrIng[1].charAt(0), 10)) {
+                    arrCount.push(arrIng[1]);
+                }
+                objIng = {
+                    count: resolveCount(arrCount),
+                    unit: '',
+                    ingredient: arrIng.slice(arrCount.length).join(' '),
+                };
+            }*/else if (unitIndex === -1) {
+                // There is NO unit and NO number in 1st position
+                objIng = {
+                    count: 1,
+                    unit: '',
+                    ingredient
+                }
+            }
+            
+            //return ingredient;
+            return objIng;
+        });
+Step 2: Call the function from the controller
+state.recipe.parseIngredients();
+
+Lecture 22: Building the Recipe View Part1
+------------------------------------------------
+Step 1: Create a function to render recipe
+Error found due to : el => createIngredient(el)).join('')
+1. Copy the markup of recipe class and store it in variable markup
+export const renderRecipe = recipe =>{
+    const markup = `
+        <figure class="recipe__fig">
+                <img src="${recipe.img}" alt="${recipe.title}" class="recipe__img">
+                <h1 class="recipe__title">
+                    <span>${recipe.title}</span>
+                </h1>
+        </figure>
+        
+        <div class="recipe__details">
+            <div class="recipe__info">
+                <svg class="recipe__info-icon">
+                    <use href="img/icons.svg#icon-stopwatch"></use>
+                </svg>
+                <span class="recipe__info-data recipe__info-data--minutes">${recipe.time}</span>
+                <span class="recipe__info-text"> minutes</span>
+            </div>
+                
+            <div class="recipe__info">
+                <svg class="recipe__info-icon">
+                    <use href="img/icons.svg#icon-man"></use>
+                </svg>
+                <span class="recipe__info-data recipe__info-data--people">${recipe.servings}</span>
+                <span class="recipe__info-text"> servings</span>
+
+                <div class="recipe__info-buttons">
+                    <button class="btn-tiny">
+                        <svg>
+                            <use href="img/icons.svg#icon-circle-with-minus"></use>
+                        </svg>
+                    </button>
+                    <button class="btn-tiny">
+                        <svg>
+                            <use href="img/icons.svg#icon-circle-with-plus"></use>
+                        </svg>
+                    </button>
+                </div>
+
+            </div>
+
+            <button class="recipe__love">
+                <svg class="header__likes">
+                    <use href="img/icons.svg#icon-heart-outlined"></use>
+                </svg>
+            </button>
+        </div>
+
+
+        <div class="recipe__ingredients">
+            <ul class="recipe__ingredient-list">
+                ${recipe.ingredients.map(el => createIngredient(el)).join('')}
+            </ul>
+
+            <button class="btn-small recipe__btn">
+                <svg class="search__icon">
+                    <use href="img/icons.svg#icon-shopping-cart"></use>
+                </svg>
+                <span>Add to shopping list</span>
+            </button>
+        </div>
+
+        <div class="recipe__directions">
+            <h2 class="heading-2">How to cook it</h2>
+            <p class="recipe__directions-text">
+                This recipe was carefully designed and tested by
+                <span class="recipe__by">${recipe.publisher}</span>. Please check out directions at their website.
+            </p>
+            <a class="btn-small recipe__btn" href="${recipe.url}" target="_blank">
+                <span>Directions</span>
+                <svg class="search__icon">
+                    <use href="img/icons.svg#icon-triangle-right"></use>
+                </svg>
+
+            </a>
+        </div>
+    `;
+    elements.recipe.insertAdjacentHTML('afterbegin', markup);
+}
+
+Step 2: In the above code replace the hardcoded values of the recipe with the recipe object
+
+Step 3: For the list element we create a seperate function which will list the ingredients
+const createIngredient = ingredient => `
+<li class="recipe__item">
+        <svg class="recipe__icon">
+            <use href="img/icons.svg#icon-check"></use>
+        </svg>
+        <div class="recipe__count">${ingredient.count}</div>
+        <div class="recipe__ingredient">
+            <span class="recipe__unit">${ingredient.unit}</span>
+            ${ingredient.ingredient}
+        </div>
+</li>
+`;
+
+We loop through the ingredients of each recipe and display the <li> for each ingredient of the particular recipe
+${recipe.ingredients.map(el => createIngredient(el)).join('')}
+
+Step 4: Display the value in the 'recipe' div area using:
+elements.recipe.insertAdjacentHTML('afterbegin', markup);
+
+Step 5: In the controller index.js we do the following
+
+1. After each new click the recipe area must clear
+recipeView.clearRecipe();
+export const clearRecipe = () =>{
+    elements.recipe.innerHTML = '';
+}
+2. We then render the loader for the recipe in the recipe area.
+
+3. We then render the recipe instead of logging to the controller
+clearLoader();
+recipeView.renderRecipe(state.recipe);
+
+Lecture 23: Building Recipe View Part2
+------------------------------------------------
+
+Step 1: Install fractional.js through npm
+
+Step 2: We need to import the fractional.js as below
+import {Fraction} from 'fractional';
+
+Step 3: Create a private function formatCount
+Accepts the arguments count
+
+const formatCount = count =>{
+	if(count){
+	// count = 2.5 => 2 1/2
+	// count = 0.5 => 1/2
+	// Use the destrutured way to get the count and seperate into integer and decimal
+	const [int, dec] = count.toString().split('.').map(el=>parseInt(el,10));// [2, 5] or [0,5]
+	
+	// Check if the destructred has decimal part
+	if(!dec){
+		return count;
+	}
+	// If integer is zero
+	if(int === 0){
+			// Instantiate the fractional components
+			const fr = new Fraction(count);
+			return `${fr.numerator}/{fr.denominator}`;
+	}else{
+		const fr  = new Fraction(count-int);
+		return `${int}${fr.numerator}/${fr.denominator}`
+	}
+	}
+	return '?'
+}
+
+Alternative way to do this is using the mathjs package
+if (count) {
+        //count = 2.5 ---> 2 1/2
+        //count = 0.5 ---> 1/2
+        const [int, dec] = count
+        .toString()
+        .split(".")
+        .map(el => parseInt(el, 10));
+ 
+        if (!dec) return count;
+ 
+        if (int === 0) {
+            const fr = fraction(count);
+ 
+            return `${fr.n}/${fr.d}`;
+        } else {
+            const fr = fraction(count - int);
+ 
+            return `${int} ${fr.n}/${fr.d}`;
+        }
+  }
+ This converts better than the first one
+
+Step 3: To highlight the part of the selction as grey
+We create a function to highlight the clicked link
+
+SearchView:
+// Function to highlightSelected links of search
+export const highlightSelected = (id) =>{
+    // Collect all the links from the results__link and store in the form of the array
+    const resultsArray = Array.from(document.querySelectorAll('.results__link'));
+    // loop through each link and remove the highlighted part
+    resultsArray.forEach(el => {
+        el.classList.remove('results__link--active');
+    });
+    // We add style to the link containg the list of recipe as follows
+    // This will permanently add the highlight to the current page we are on
+    document.querySelector(`a[href="#${id}"]`).classList.add('results__link--active');
+}
+
+Step 4: Call the same from the controller
+// Highlight the selected search item
+if (state.search) searchView.highlightSelected(id);
+
+Lecture 24: Updating Recipe Servings
+-----------------------------------------------
+1. Another way of implementing event delegation: .matches
+
+Step 1: create a new method in the Recipe model updateServings to update the servings for each person
+// A function to update the servings of the Recipe
+    updateServings(type){
+        // Servings
+        const newServings = type === 'dec' ? this.servings - 1 : this.servings + 1;
+        
+        // Ingredients
+        
+        // Update the count numbers of the ingredients
+        this.ingredients.forEach(ing => {
+            ing.count *= (newServings / this.servings);
+        });
+        
+        // Updates the servings
+        this.servings = newServings;
+        
+        
+    }
+
+Step 2: Adding event handlers for the increse and decrease button
+
+1. Add the btn-increase and btn-decrease to recipe-info buttons
+
+We use a new function: Element.matches() 
+checks to see if the Element would be selected by the provided selectorString -- in other words -- checks if the element is the selector
+// Handling recipe button clicks
+elements.recipe.addEventListener('click', e=>{
+    if (e.target.matches('.btn-decrease, .btn-decrease *')){
+        if(state.recipe.servings > 1){
+            // Decrease button is clicked
+            state.recipe.updateServings('dec');  
+            // Update the UI
+            recipeView.updateServingsIngredients(state.recipe);
+        }
+    }else if (e.target.matches('.btn-increase, .btn-increase *')){
+        // Increase button is clicked
+        state.recipe.updateServings('inc');   
+        // call the updateServingsIngredients both
+		recipeView.updateServingsIngredients(state.recipe);
+    }
+    console.log(state.recipe);
+});
+
+Step 3: Update the user interface
+
+export const updateServingsIngredients = recipe => {
+    // Update the servings
+    document.querySelector('.recipe__info-data--people').textContent = recipe.servings;
+    
+    // Update the ingredients
+    // create an array of recipe counts
+    const countElements = Array.from(document.querySelectorAll('.recipe__count'));
+    // each element count loops to format the count of the recipe.ingredients array count property
+    countElements.forEach((el, index) =>{
+        el.textContent = formatCount(recipe.ingredients[index].count);
+    });
+}
+
+
+Lecture 25:Building the shopping List models
+--------------------------------------------------------
+1. How and why to create unique IDs using external package
+2. Difference between Array.slice and Array.splice
+3. More use case for Array.findIndex and Array.find
+
+Step 1: Create a new Model file List.js
+
+Step 2: Create a class and export the class that will store the item array for the ingredients to be added to the shopping list.
+export default class List{}
+Step 3: install npm uniqid --save
+// Import uniqid
+import uniqid from 'uniqid';
+Step 4: Add the function to addItem to the shopping cart
+addItem(count, unit, ingredient){
+        // We need to add external ID to track the ingredinets being added
+        const item = {
+            id: uniqid(),
+            count,
+            unit,
+            ingredient
+        }
+        this.items.push(item);
+        return item;
+    }
+Step 5: Add the function to deleteItem from the shopping cart
+
+Usage of Array.prorotype.splice() method
+1. Splice method changes the contents of array be removing or replacing the exisintg elements and or adding new elements in place.	
+// function to deleteItem from the Shopping List
+    deleteItem(id){
+        // usage of splice method
+        // [2,4,6] splice(1,1)=> returns 4 and the array now is [2,6]
+        // [2,4,6] slice(1,2)=> returns 4 but the array remains the same [2, 4,6]
+        // Using findIndex to return the index of the specified value
+        const index = this.items.findIndex(el => {
+            // test current element id equals the passed id
+            el.id === id
+        });
+        
+        this.items.splice(index,1);
+    }
+Step 6: Update the count
+// function to update the count of the ingredients
+    updateCount(id, newCount){
+        // using find to return the item
+        this.items.find(el => el.id === id).count = newCount;
+    }
+
+Lecture 26: Building the shopping list view
+--------------------------------------------------
+
+Step 1: Create a function to render the list in the my shpooing list pane
+1. Select one of the li field under the class shopping__list and assign it to markup variable
+2. Remove the hardocded values:
+3. Add a class to the input of item count to be refered later
+4. Add a data attribute data-item = ${item.id}
+
+export const renderItem = item => {
+    // Markup varibale for the list contained below ul with class name shopping__list
+    const markup = `
+        <li class="shopping__item" data-itemid = ${item.id}>
+                    <div class="shopping__count">
+                        <input type="number" class = "shopping__count-value" value="${item.count}" step="${item.count}">
+                        <p>${item.unit}</p>
+                    </div>
+                    <p class="shopping__description">${item.ingredient}</p>
+                    <button class="shopping__delete btn-tiny">
+                        <svg>
+                            <use href="img/icons.svg#icon-circle-with-cross"></use>
+                        </svg>
+                    </button>
+        </li>
+    `;
+    elements.shopping.insertAdjacentHTML('beforeend', markup);
+}
+
+Step 2: Create a function to the delete item from the shopping list
+// function to delete item in the View
+export const deleteItem = id =>{
+    // select the item id from the data attribute in the list
+    const item = document.querySelector(`[data-itemid ="${id}"]`);
+    // remove the child
+    item.parentElement.removeChild(item);
+}
+
+Lecture 27: Building Shopping List Controller
+-------------------------------------------------------
+Step 1: In the recipe view we add a class recipe__Btn--add to add the value to the list
+
+Step 2: In the controller we call the controlList from the recipe event listener as follows;
+else if(e.target.matches('.recipe__btn--add, .recipe__btn--add *')){
+        controlList();
+    }
+Step 3: We then add a new event listener to delete and update the event listener
+// Handle delete and update item list events
+elements.shopping.addEventListener('click', e => {
+   // use the closest function to get the data attribute
+   const id = e.target.closest('.shopping__item').dataset.itemid;
+   
+   // Handle the delete event
+   if(e.target.matches('.shopping__delete, .shopping__delete *')){
+       // Delete from the state
+       state.list.deleteItem(id);
+       
+       // Delete from the UI
+       listView.deleteItem(id);
+   }else if(e.target.matches('.shopping__count-value')){
+       const val = parseFloat(e.target.value,10);
+       // Handle count update
+       state.list.updateCount(id,val);
+   }
+});
+
+Step 4: Define the controlList function as follows:
+const controlList = () =>{
+    // Create a new list if there is none yet
+    if(!state.list) state.list = new List();
+    
+    // Add each ingredinet to the list and UI
+    state.recipe.ingredients.forEach(el =>{
+       // store the return of item array from the addItem function
+       const item = state.list.addItem(el.count, el.unit, el.ingredient);
+       // Render the list to the front end
+       listView.renderItem(item);
+    });
+}
+
+Additional Work:
+1. When we click on 'Add to Shopping Cart' Twice for the same recipe duplicate list is added.
+Step 1: Add the code in the Model List.js
+duplicateID(unit, ingredient){
+	const dupItem = this.items.find(el =>{
+		el.ingredient === ingredinet && el.unit === unit)
+	});
+	return dupItem ? dupItem.id:false;
+}
+
+getCount(id) {
+    return this.items.find((el) => el.id === id).count;
+}
+
+Step 2: Add the following  updateItem function to the ListView
+export const updateItem = (id, count) => {
+    const item = document.querySelector(`[data-itemid="${id}"]`);
+    if (item) {
+        item.querySelector('.shopping__count-value').value = count;
+    }
+};
+
+Step 3: Add the following to the controller index.js
+Add the following:
+
+// Create a new list IF there is none yet
+    if (!state.list) {
+        state.list = new List();
+ 
+        // Add each ingredient to the list
+        state.recipe.ingredients.forEach((el) => {
+            const item = state.list.addItem(el.count, el.unit, el.ingredient);
+            listView.renderItem(item);
+        });
+    } else {
+        state.recipe.ingredients.forEach((el) => {
+            // Check for duplicates
+            const id = state.list.duplicateID(el.unit, el.ingredient);
+            if (!id) {
+                // Add ingredients to list if not duplicate
+                const item = state.list.addItem(el.count, el.unit, el.ingredient);
+                listView.renderItem(item);
+            } else {
+                // Update count if duplicate
+                const count = state.list.getCount(id) + el.count;
+                listView.updateItem(id, count);
+                state.list.updateCount(id, count);
+            }
+        });
+    }
+Step 4: To avoid -ve value in the input
+
+if (val<=0){
+           // stepUp does not let the value go down to -ve value
+           e.target.stepUp();
+           const val = parseFloat(e.target.value,10);
+       }
+Step 5 add min =0 as follows:
+<input type="number" min="0" class = "shopping__count-value" value="${item.count}" step="${item.count}">
+
+Lecture 28: Building the Likes Model
+-------------------------------------------
+Create a Likes Model Class containing the functions
+addLike
+deleteLike
+getNumLikes
+isLiked
+
+The code is as below:
+export default class Likes{
+    constructor(){
+        this.likes = [];
+    }
+    
+    // Function to add likes
+    addLike(id, title, author, img){
+        // Object Destructuring
+        const like = {id, title, author, img};
+        this.likes.push(like);
+        return like;
+    }
+    
+    // Function to delete the likes
+    deleteLike(id){
+        const index = this.likes.findIndex(el => {
+            el.id === id
+        });
+        this.likes.splice(index,1);
+    }
+    
+    // Function to check if the particular id is liked so the state is saved.
+    isLiked(id){
+        return this.likes.findIndex(el => el.id === id) !=-1;
+    }
+    
+    // Function to get the num of liked recipe
+    getNumLikes(){
+        return this.likes.length;
+    }
+}
+
+Lecture 29: Building the Likes Controller
+--------------------------------------------------------
+Step 1: As the like component is present in the RecipeView we need to delegate the controller to call the controlLikes as follows
+else if(e.target.matches('.recipe__love, .recipe__love *')){
+        // Add likes using the like controller
+        controlLikes();
+    }
+Step 2: We then create the function of likes controller as follows:
+const controlLikes = () =>{
+    if(!state.likes){
+      state.likes = new Likes();
+    }
+    const currentId = state.recipe.id;
+    
+    // User has not yet liked current recipe
+    if(!state.likes.isLiked(currentId)){
+        // Add like to the data
+        const newLike = state.likes.addLike(
+            currentId,
+            state.recipe.title,
+            state.recipe.publisher,
+            state.recipe.img
+        );
+        // Toggle the like button
+        
+        // Add like to UI list
+        console.log(state.likes);
+    
+    }
+    // User has liked the liked the current recipe
+    else{
+        // Remove the like from the state
+        state.likes.deleteLike(currentId);
+        // Toggle the like button
+        
+        // Remove the list from the UI list
+        console.log(state.likes);
+    }
+}
+
+Lecture 30: Builiding the Likes View
+-----------------------------------------------------------
+
+Step 1: Add a function to toggle the like button
+export const toggleLikeBtn = isLiked =>{
+    /*We toggle the below:
+    <use href="img/icons.svg#icon-heart-outlined"></use>
+    1. #icon-heart-outlined- when liked
+    2. #icon-hear-notoutline- when not liked
+    */
+    const iconString = isLiked ? 'icon-heart':'icon-heart-outlined';
+    // In the use tag with class recipe__love use we set the attribute of the tag as below
+    document.querySelector('.recipe__love use').setAttribute('href', `img/icons.svg#${iconString}`);
+}
+
+Step 2: Add a function for the The liked menu to be only visible when the recipe is liked
+
+export const toggleLikeMenu = numLikes => {
+    elements.likesMenu.style.visibility = numLikes > 0? 'visible':'hidden';
+}
+
+Step 3: Write a function to render the list of the liked items
+export const renderLike = like => {
+    const markup = `
+        <li>
+            <a class="likes__link" href="#${like.id}">
+                <figure class="likes__fig">
+                    <img src="${like.img}" alt="${like.title}">
+                </figure>
+                <div class="likes__data">
+                    <h4 class="likes__name">${limitRecipeTitle(like.title)}</h4>
+                    <p class="likes__author">${like.publisher}</p>
+                </div>
+            </a>
+        </li>
+    `;
+    elements.likesList.insertAdjacentHTML('beforeend', markup);
+    
+}
+
+Step 4: Write a function to delete the liked item from the liked menu
+------------------------------------------------------------------------
+export const deleteLike = (id) =>{
+    const el = document.querySelector(`.likes__link[href="#${id}"]`);
+    if (el) el.parentElement.removeChild(el);
+}
+
+Step5: call the same as below:
+
+state.likes = new Likes();
+likesView.toggleLikeMenu(state.likes.getNumLikes());
+const controlLikes = () =>{
+    if(!state.likes){
+      state.likes = new Likes();
+    }
+    const currentId = state.recipe.id;
+    
+    // User has not yet liked current recipe
+    if(!state.likes.isLiked(currentId)){
+        // Add like to the data
+        const newLike = state.likes.addLike(
+            currentId,
+            state.recipe.title,
+            state.recipe.publisher,
+            state.recipe.img
+        );
+        // Toggle the like button
+        likesView.toggleLikeBtn(true);
+        
+        // Add like to UI list
+        likesView.renderLike(newLike);
+        
+        console.log(state.likes);
+    
+    }
+    // User has liked the liked the current recipe
+    else{
+        // Remove the like from the state
+        state.likes.deleteLike(currentId);
+        // Toggle the like button
+        likesView.toggleLikeBtn(false);
+        
+        // Remove the list from the UI list
+        likesView.deleteLike(currentId);
+        console.log(state.likes);
+    }
+    
+    likesView.toggleLikeMenu(state.likes.getNumLikes());
+}
+
+Lecture 31: Implementing Persistent Data with localStorage.
+--------------------------------------------------------------------
+Using localStorage for persisitence
+1. localStorage.setItem('id',2)- To set the data
+2. localStorage.getItem('id')- To get the data
+
+Implement Local Storage in models for Likes
+Step 1: Add the below code in the Likes Model
+
+// create a function to persist data
+    persistData(){
+        // setItem use a key value pair to store the data
+        // here we store the likes in the local storage and convert the items liked into JSON
+        localStorage.setItem('likes', JSON.stringify(this.likes));
+    }
+    
+    // retrive the data from the localStorage
+    readStorage(){
+        const storage = JSON.parse(localStorage.getItem('likes'));
+        // Restore the likes from the local storage
+        if (storage){
+            this.likes = storage;
+        }
+    }
+Step 2: Call the same from the like controller
+// Restore liked recipes on page load
+window.addEventListener('load', () => {
+    state.likes = new Likes();
+    
+    // Restore likes
+    state.likes.readStorage();
+
+    // Toggle like menu button
+    likesView.toggleLikeMenu(state.likes.getNumLikes());
+
+    // Render the existing likes
+    state.likes.likes.forEach(like => likesView.renderLike(like));
+});
+
+Lecture 32: Final Touches
+
+Running production
+
+To Do Improvements
+1. Implment Button to delete all the shopping list items
+2. Implement function to manually add items to the shopping list
+3. Save shopping list data in local storage
+4. Improve Error Handling
+
+
+Note: Event Delegation:
+
+1. We use it when we need event handlers on an unknown number of elements that are all children of a known element.
+2. Event delegation makes use of event bubbling bcoz event bubbling allow us to "wait" until an event bubbles up to a know element.
+3. We use it when we need the event handlers on elements that are not in DOM when our code enters the execution phase.
+
+Why is a call method useful for method borrowing?
+Because it allows us to set this variable manually
+
+What is a callback function
+
+A function that is passed to another function as an argument
+
+
+In a module pattern why can pub;ic functiom access private functions and variables
+
+Because closure was created.
+
+Function A declares variable X and return funtion B . Can function B access varibale x?
+
+Yes because of clousures
+
+What do the expressions 1 == true and 1 === true return?
+
+true and false because == coercion === no coercion
+
+In JavaScript, functions attached to objects are called:
+Methods
+
+Can we call the function expressions A at line 126 in our code if A is declared in line 253?
+No it is only possible for function declaration
+
+Thanks to hoisting:
+Varibles are set to undefined in the creation phase
+
+What is NOT true about anonymous functions?
+Closures are not formed within anonymous functions
+
+Function A declares variable X and function B. Can function B access variable X?
+Yes because of scope chain
+
+In JavaScript, scopes are created by:
+Functions
+
+Which of the following statements about the 'this' keyword is NOT correct?
+
+What is NOT true about event delegation?
+
+What does the ‘new’ operator NOT do?
+Returning an execution context
+
+Consider object A = object B. By mutating property X on A, X on B will:
+Which declaration is NOT true about encapsulation?
+
+In the module pattern, why can public methods access private functions and variables?
+
+Because closure was created.
+
+Jonas Schemedtmann
+
+
+git remote add origin git@github.com:prashubarry/ForkifyP.git
+
+================================================================================================================================================
+Eloquent JavaScript
+================================================================================================================================================
+Bindings and Scope
+---------------------
+1. Each binding has a scope which is a part of the program in which binding is visibile.
+2. For bindings outside the scope of any function or block the scope is the whole program i.e global.
+3. Bindings decalred with the let and const are in fact local to the block in which they are defined.
+4. In pre-2015 version of JS the var could be visible from the whole function in which they appear in.
