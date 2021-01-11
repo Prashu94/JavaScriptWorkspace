@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <title>Hello World!!!</title>
+        <!--Script tags including React-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.1/react.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.1/react-dom.min.js"></script>
+        <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+        <link
+            href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+            rel="stylesheet" type="text/css" />
+        <link href = "./Timeline_1.css" rel = "stylesheet" type = "text/css"></link>
+    </head>
+
+    <body>
+        <div>
+            <div class="demo">
+                <div id="app"></div>
+            </div>
+        </div>
+        <script type = "text/babel">
+            class Timeline extends React.Component{
+                render(){
+                    return(
+                        <div className="notificationsFrame">
+                            
+                            <div className = "panel">
+                                
+                                <div className="header">
+
+                                    <div className="menuIcon">
+                                        <div className="dashTop"></div>
+                                        <div className="dashBottom"></div>
+                                        <div className="circle"></div>
+                                    </div>
+                                    
+
+                                    <span className="title">Timeline</span>
+
+                                    <input
+                                        type="text"
+                                        className="searchInput"
+                                        placeholder="Search..."
+                                    />
+
+                                    <div className="fa fa-search searchIcon"></div>
+                                
+                                </div>
+
+                                <div className="content">
+                                    
+                                    <div className="line"></div>
+                                    
+                                    <div className="item">
+                                        <div className="avatar">
+                                            
+                                            <img
+                                                alt="doug"
+                                                src="http://www.croop.cl/UI/twitter/images/doug.jpg"
+                                            />
+                                        </div>
+
+                                            <span className="time">An Hour Ago</span>
+                                            
+                                            <p>Ate Lunch!!</p>
+                                            
+                                            <div className="commentCount">2</div>
+
+                                    </div>
+                                    <div className="item">
+                                        <div className="avatar">
+                                            <img
+                                                alt="doug"
+                                                src="http://www.croop.cl/UI/twitter/images/doug.jpg"
+                                            />
+                                        </div>
+
+                                            <span className="time">10 a.m</span>
+                                            
+                                            <p>PLSQL Programming Done</p>
+                                            
+                                            <div className="commentCount">3</div>
+                                        
+                                    </div>
+                                    <div className="item">
+                                        <div className="avatar">
+                                            <img
+                                                alt="doug"
+                                                src="http://www.croop.cl/UI/twitter/images/doug.jpg"
+                                            />
+                                        </div>
+
+                                            <span className="time">9 a.m</span>
+                                            
+                                            <p>Python Programming Done</p>
+                                            
+                                            <div className="commentCount">5</div>    
+                                        
+                                    </div>
+                                    <div className="item">
+                                        <div className="avatar">
+                                            <img
+                                                alt="doug"
+                                                src="http://www.croop.cl/UI/twitter/images/doug.jpg"
+                                            />
+                                        </div>
+                                            <span className="time">12 p.m</span>
+                                            
+                                            <p>Java Programming Done</p>
+                                            
+                                            <div className="commentCount">2</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    );
+                }
+            }
+            ReactDOM.render(<Timeline/>, document.querySelector('#app'));
+        </script>
+    </body>
+</html>

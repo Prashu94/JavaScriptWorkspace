@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8"/>
+        <title>Understanding the hook calls</title>
+        <!--Script tags including React-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/react/17.0.1/umd/react.production.min.js" integrity="sha512-YMtLFKDKe5a4zi7rJ0y4wdGErKZe3tx7L+AXDTxjNDzkv7jsaNhvumeU1xQvw6UqVwBVmYlO9NhsSuSVPUN/xQ==" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/17.0.1/umd/react-dom.production.min.js" integrity="sha512-vN6rbu+vWW4Ck3s6RbLZs+0gRl5PWOZRUqap38gZtsheSqA2zDeI3PCshuxfYx7ytkoFMrmd0gA2sZZeP1RZYQ==" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js" integrity="sha512-kp7YHLxuJDJcOzStgd6vtpxr4ZU9kjn77e6dBsivSz+pUuAuMlE2UTdKB7jjsWT84qbS8kdCWHPETnP/ctrFsA==" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous"></script>
+        <!-- this file will declare our `data` variable -->
+        <script src="./data.js"></script>
+        <link
+        href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+        rel="stylesheet"
+        type="text/css"
+        />
+        <link
+        href="./Timeline.css"
+        rel="stylesheet"
+        type="text/css"
+        />
+    </head>
+    <body>
+        <div class="demo">
+            <div class="notificationsFrame">
+                <div id = "app"></div>
+            </div>
+        </div>
+        <script type = "text/babel">
+            
+            class Content extends React.Component{
+                constructor(props){
+                    super(props);
+                    this.state = {
+                        activities : []
+                    };
+                }   
+
+                componentDidMount(){
+                    this.setState({ activities: data });
+                }
+
+                render(){
+                    const {activities} = this.state;
+                    return(
+                        <div className = "content">
+                            <div className = "line"></div>
+
+                            {activities.map(activity => (
+                                <ActivityItem activity={activity} />
+                            ))}
+                        </div>
+                    );
+                }
+            }
+            class ActivityItem extends React.Component{
+                
+                render(){
+                    const {activity} = this.props;    
+
+                    return(
+                        <div className="item">
+                            <div className={"avatar"}>
+                                <img alt="avatar" src={activity.actor.avatar_url} />
+                            </div>
+
+                            <span className={"time"}>
+                                {moment(activity.created_at).fromNow()}
+                            </span>
+
+                            <p>
+                                {activity.actor.display_login} {activity.payload.action}
+                            </p>
+                            <div className={"right"}>{activity.repo.name}</div>
+                        </div>
+                    )
+                }
+            }
+
+            ReactDOM.render(<Content/>, document.querySelector("#app"));
+        </script>
+    </body>
+</html>
