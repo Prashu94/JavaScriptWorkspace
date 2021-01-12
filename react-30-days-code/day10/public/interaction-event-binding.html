@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <title>Interactivity Buttons</title>
+        <!--Script tags including React-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/react/17.0.1/umd/react.production.min.js" integrity="sha512-YMtLFKDKe5a4zi7rJ0y4wdGErKZe3tx7L+AXDTxjNDzkv7jsaNhvumeU1xQvw6UqVwBVmYlO9NhsSuSVPUN/xQ==" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/17.0.1/umd/react-dom.production.min.js" integrity="sha512-vN6rbu+vWW4Ck3s6RbLZs+0gRl5PWOZRUqap38gZtsheSqA2zDeI3PCshuxfYx7ytkoFMrmd0gA2sZZeP1RZYQ==" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js" integrity="sha512-kp7YHLxuJDJcOzStgd6vtpxr4ZU9kjn77e6dBsivSz+pUuAuMlE2UTdKB7jjsWT84qbS8kdCWHPETnP/ctrFsA==" crossorigin="anonymous"></script>
+
+        <link
+            href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+            rel="stylesheet"
+            type="text/css"
+        />
+        <link href="./style.css" rel="stylesheet" type="text/css" />
+
+    </head>
+
+    <body>
+        <div class="demo">
+            <div id = "app"></div>
+        </div>
+        <script type = "text/babel">
+            const events = [
+                "MouseMove",
+                "MouseUp",
+                "MouseDown",
+                "Click",
+                "DoubleClick",
+                "MouseLeave",
+                "TouchStart",
+                "TouchEnd"
+            ];
+            class InteractivityDemo extends React.Component{
+                constructor(props){
+                    super(props);
+                    this.state = events.reduce(
+                        (sum, e) => ({
+                            ...sum, 
+                            [e]: false
+                        }),
+                        {}
+                    );
+                    console.log(this.state);
+                }
+
+                onEvent = (name, evt) =>{
+                    this.setState({ [name]: true });
+                }
+
+                reset = (name) => {
+                    this.setState({ [name]: false });
+                }
+                render() {
+                    return (
+                        <div className = "eventContainer">
+                            <ul>
+                                {events.map(e => {
+                                    const triggered = this.state[e];
+                                    const props = {
+                                        [`on${e}`]: this.onEvent.bind(this, e)
+                                    };
+
+                                    return(
+                                        <li className = "eventListing" key = {e}>
+                                            <div className = "reset" onClick = {this.reset.bind(this,e)}>
+                                                <i className = "fa fa-refresh"/>
+                                            </div>
+
+                                            <div className = "name" {...props}>
+                                                {`on${e}`}
+                                            </div>
+
+                                            <div className="trigger">
+                                                <i
+                                                    className={
+                                                    "fa " + (triggered ? "fa-square" : "fa-square-o")
+                                                    }
+                                                />
+                                            </div>
+                                        </li>
+                                    );
+                                })}
+                            </ul>
+                        </div>
+                    );
+                }
+            }
+
+            ReactDOM.render(<InteractivityDemo />, document.getElementById('app'));
+        </script>
+    </body>
+</html>
